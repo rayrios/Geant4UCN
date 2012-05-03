@@ -86,8 +86,8 @@ UCNSpin::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
       G4double t = currentStepLength * 1000. / currentVelocity;
       double anglePerStep = 183e6*currentField*t;
         // if spin plus, turn the spin clockwise, otherwise ounterclockwise
-      if (current_spin > 0){totalAngle = totalAngle + anglePerStep;}
-      else if (current_spin < 0){totalAngle = totalAngle - anglePerStep;}
+      if (current_spin[2] > 0){totalAngle = totalAngle + anglePerStep;}
+      else if (current_spin[2] < 0){totalAngle = totalAngle - anglePerStep;}
       double newangle = fmod(totalAngle,(2*pi));
       //G4cout << "angleperstep " << anglePerStep << ", totalAngle " << totalAngle << 
       //		", effective angle " << newangle << G4endl;

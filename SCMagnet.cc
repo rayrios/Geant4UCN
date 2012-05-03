@@ -52,7 +52,7 @@
 #include "F02EventAction.hh"
 #include "F02SteppingAction.hh"
 #include "F02SteppingVerbose.hh"
-#include "G4UIXm.hh"
+// #include "G4UIXm.hh"
 #include "UCNSaveToFile.hh"
 
 int main(int argc,char** argv) 

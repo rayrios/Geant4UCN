@@ -24,7 +24,7 @@
 
 G4double UCNTimedependentField::gtime = 0;
 UCNTimedependentField* UCNTimedependentField::theInstance = 0;
-G4ThreeVector UCNTimedependentField::spin = 0;
+G4ThreeVector UCNTimedependentField::spin;
 
 UCNTimedependentField::UCNTimedependentField()
 {
