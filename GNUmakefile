@@ -7,8 +7,6 @@ name := SCMagnet
 G4TARGET := $(name)
 G4EXLIB := true
 
-CPPFLAGS += -I../Geant4UCN/include -L$(G4WORKDIR)/tmp/Linux-g++/Geant4UCN
-EXTRALIBS := -lGeant4UCN
 
 ifndef G4INSTALL
   G4INSTALL = ../../../..
