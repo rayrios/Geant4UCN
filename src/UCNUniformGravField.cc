@@ -38,6 +38,8 @@
 #include "G4SteppingControl.hh"
 #include "G4VParticleChange.hh"
 
+#include "G4ExceptionSeverity.hh"
+
 UCNUniformGravField* UCNUniformGravField::theInstance = 0;
 G4int UCNUniformGravField::index = 0;
 
@@ -64,7 +66,7 @@ UCNUniformGravField::UCNUniformGravField(G4double vField,
     }
   else
     {
-      G4Exception("Invalid parameters in UCNUniformGravField::UCNUniformGravField") ;
+      G4Exception("Invalid parameters in UCNUniformGravField::UCNUniformGravField", "", (G4ExceptionSeverity)0, "") ;
     }
 }
 

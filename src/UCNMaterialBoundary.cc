@@ -97,21 +97,21 @@ const G4Step& aStep)
 	      
 	      if (T) { 
 		G4MaterialPropertyVector* eff1 =T->GetProperty("FERMIPOT");
-		if (eff1) {sh_fermipot = eff1->GetProperty(1);}
+		if (eff1) {sh_fermipot = eff1->GetEnergy(1);}
 		G4MaterialPropertyVector* eff2 =T->GetProperty("REFLECTIVITY");
-		if (eff2) {sh_reflectivity = eff2->GetProperty(1);}
+		if (eff2) {sh_reflectivity = eff2->GetEnergy(1);}
 		G4MaterialPropertyVector* eff3 =T->GetProperty("DIFFUSION");
-		if (eff3) {sh_diffusion = eff3->GetProperty(1);}
+		if (eff3) {sh_diffusion = eff3->GetEnergy(1);}
 		G4MaterialPropertyVector* eff4 =T->GetProperty("SPINFLIP");
-		if (eff4) {sh_spinflip = eff4->GetProperty(1);}
+		if (eff4) {sh_spinflip = eff4->GetEnergy(1);}
 		G4MaterialPropertyVector* eff5 =T->GetProperty("LOSS");
-		if (eff5) {sh_loss = eff5->GetProperty(1);}
+		if (eff5) {sh_loss = eff5->GetEnergy(1);}
 		G4MaterialPropertyVector* eff6 =T->GetProperty("LOSSCS");
-		if (eff6) {sh_losscs = eff6->GetProperty(1);}
+		if (eff6) {sh_losscs = eff6->GetEnergy(1);}
 		G4MaterialPropertyVector* eff7 =T->GetProperty("ABSCS");
-		if (eff7) {sh_abscs = eff7->GetProperty(1);}
+		if (eff7) {sh_abscs = eff7->GetEnergy(1);}
 		G4MaterialPropertyVector* eff8 =T->GetProperty("SCATCS");
-		if (eff8) {sh_scatcs = eff8->GetProperty(1);}
+		if (eff8) {sh_scatcs = eff8->GetEnergy(1);}
 		T->RemoveProperty("FERMIPOT");
 		T->RemoveProperty("REFLECTIVITY");
 		T->RemoveProperty("DIFFUSION");
@@ -223,22 +223,22 @@ const G4Step& aStep)
   // properties in the new volume
   if (aMaterialPropertiesTable) { 
     G4MaterialPropertyVector* eff1 = aMaterialPropertiesTable->GetProperty("FERMIPOT");
-    if (eff1) {fermipot = eff1->GetProperty(1);}
+    if (eff1) {fermipot = eff1->GetEnergy(1);}
   }
 
   if (aMaterialPropertiesTable) {
     G4MaterialPropertyVector* eff2 = aMaterialPropertiesTable->GetProperty("DIFFUSION");
-    if (eff2) {pdiffus = eff2->GetProperty(1);}
+    if (eff2) {pdiffus = eff2->GetEnergy(1);}
   }
 
   if (aMaterialPropertiesTable) {
     G4MaterialPropertyVector* eff3 = aMaterialPropertiesTable->GetProperty("SPINFLIP");
-    if (eff3) {pspinflip = eff3->GetProperty(1);}
+    if (eff3) {pspinflip = eff3->GetEnergy(1);}
   }
   
   if (aMaterialPropertiesTable) {
     G4MaterialPropertyVector* eff4 = aMaterialPropertiesTable->GetProperty("LOSS");
-    if (eff4) { pupscatter = eff4->GetProperty(1);}
+    if (eff4) { pupscatter = eff4->GetEnergy(1);}
   }
 
   // properties of the old volume
@@ -247,22 +247,22 @@ const G4Step& aStep)
   G4double fermipot_previous = 0.;
   if (aMaterialPropertiesTable2) { 
     G4MaterialPropertyVector* prev1 = aMaterialPropertiesTable2->GetProperty("FERMIPOT");
-    if (prev1) {fermipot_previous = prev1->GetProperty(1);}	
+    if (prev1) {fermipot_previous = prev1->GetEnergy(1);}	
   }
   G4double pdiffus_previous = 0.;
   if (aMaterialPropertiesTable2) { 
     G4MaterialPropertyVector* prev2 = aMaterialPropertiesTable2->GetProperty("DIFFUSION");
-    if (prev2) {pdiffus_previous = prev2->GetProperty(1);}
+    if (prev2) {pdiffus_previous = prev2->GetEnergy(1);}
   }
   G4double spinflip_previous = 0.;
   if (aMaterialPropertiesTable2) { 
     G4MaterialPropertyVector* prev3 = aMaterialPropertiesTable2->GetProperty("SPINFLIP");
-    if (prev3) {spinflip_previous = prev3->GetProperty(1);}
+    if (prev3) {spinflip_previous = prev3->GetEnergy(1);}
   }
   G4double loss_previous = 0.;
   if (aMaterialPropertiesTable2) { 
     G4MaterialPropertyVector* prev4 = aMaterialPropertiesTable2->GetProperty("LOSS");
-    if (prev4) {loss_previous = prev4->GetProperty(1);}
+    if (prev4) {loss_previous = prev4->GetEnergy(1);}
   }
   //// there is the possibility to use the inverted material properties,
   //   eg. for tubes in a vacuum, you dont have to specify inner and outer diameter,

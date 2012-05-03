@@ -62,7 +62,7 @@ G4double UCNSimpleLoss::GetMeanFreePath(const G4Track& aTrack,
 	G4double losscs = 0.;
         if (aMaterialPropertiesTable) { G4MaterialPropertyVector* eff1 =
 		aMaterialPropertiesTable->GetProperty("LOSSCS");
-		if (eff1) {losscs = eff1->GetProperty(1);}
+		if (eff1) {losscs = eff1->GetEnergy(1);}
         } 
 
    if (losscs) {
