@@ -93,10 +93,10 @@ void UCNVisManager::RegisterGraphicsSystems () {
 //  RegisterGraphicsSystem (new G4ASCIITree);
 // RegisterGraphicsSystem (new G4DAWNFILE);
 // RegisterGraphicsSystem (new G4HepRepFile);
-  RegisterGraphicsSystem (new G4HepRep);
-  RegisterGraphicsSystem (new G4RayTracer);
-  RegisterGraphicsSystem (new G4VRML1File);
-  RegisterGraphicsSystem (new G4VRML2File);
+// RegisterGraphicsSystem (new G4HepRep);
+//  RegisterGraphicsSystem (new G4RayTracer);
+//  RegisterGraphicsSystem (new G4VRML1File);
+//  RegisterGraphicsSystem (new G4VRML2File);
 
   // Graphics systems needing external packages or libraries...
 
@@ -105,8 +105,8 @@ void UCNVisManager::RegisterGraphicsSystems () {
 #endif
 
 #ifdef G4VIS_USE_OPENGLX
-  RegisterGraphicsSystem (new G4OpenGLImmediateX);
-  RegisterGraphicsSystem (new G4OpenGLStoredX);
+//  RegisterGraphicsSystem (new G4OpenGLImmediateX);
+//  RegisterGraphicsSystem (new G4OpenGLStoredX);
 #endif
 
 #ifdef G4VIS_USE_OPENGLWIN32
