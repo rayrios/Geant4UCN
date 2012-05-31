@@ -92,7 +92,7 @@ void UCNVisManager::RegisterGraphicsSystems () {
   // Graphics Systems not needing external packages or libraries...
 //  RegisterGraphicsSystem (new G4ASCIITree);
 // RegisterGraphicsSystem (new G4DAWNFILE);
-  RegisterGraphicsSystem (new G4HepRepFile);
+// RegisterGraphicsSystem (new G4HepRepFile);
   RegisterGraphicsSystem (new G4HepRep);
   RegisterGraphicsSystem (new G4RayTracer);
   RegisterGraphicsSystem (new G4VRML1File);
