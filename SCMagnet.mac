@@ -59,17 +59,17 @@
 #
 
 # visualization
-#/vis/scene/create
+/vis/scene/create
 #/vis/open DAWNFILE
-#/vis/open OGLSXm
+/vis/open OGLSXm
 #/vis/viewer/flush
-#/vis/viewer/set/viewpointThetaPhi 90 180 deg
-#/vis/viewer/zoom 1
-#/vis/viewer/flush
+/vis/viewer/set/viewpointThetaPhi 90 180 deg
+/vis/viewer/zoom 1
+/vis/viewer/flush
 
 # add the trajectories
-#/tracking/storeTrajectory 1
-#/vis/viewer/flush
+/tracking/storeTrajectory 1
+/vis/viewer/flush
 
 #ready
 #/vis/scene/endOfEventAction accumulate
