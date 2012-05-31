@@ -40,9 +40,10 @@
 #include "Randomize.hh"
 #include "G4UItcsh.hh"
 
-#ifdef G4VIS_USE
+//#ifdef G4VIS_USE
 #include "UCNVisManager.hh"
-#endif
+//#endif
+#include "G4VisExecutive.hh"
 
 #include "UCNDetectorConstruction.hh"
 #include "UCNFieldSetup.hh"
