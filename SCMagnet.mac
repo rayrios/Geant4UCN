@@ -61,7 +61,7 @@
 # visualization
 /vis/scene/create
 #/vis/open DAWNFILE
-/vis/open OGLSXm
+/vis/open OGLSX
 #/vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 90 180 deg
 /vis/viewer/zoom 1
