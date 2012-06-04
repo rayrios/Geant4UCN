@@ -68,7 +68,7 @@ G4double UCNSimpleAbsorption::GetMeanFreePath(const G4Track& aTrack,
 
   if (aMaterialPropertiesTable) { 
     G4MaterialPropertyVector* eff1 = aMaterialPropertiesTable->GetProperty("ABSCS");
-    if (eff1) losscs = eff1->GetEnergy(1);
+    if (eff1) losscs = eff1->Value(1);
   }
  
   G4double theA = aMaterial->GetElement(0)->GetN();

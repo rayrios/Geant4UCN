@@ -87,7 +87,7 @@ G4double UCNMultiScattering::GetMeanFreePath(const G4Track& aTrack,
 
         if (aMaterialPropertiesTable) { G4MaterialPropertyVector* eff1 =
 		aMaterialPropertiesTable->GetProperty("SCATCS");
-		if (eff1) {scatcs = eff1->GetEnergy(1);}
+		if (eff1) {scatcs = eff1->Value(1);}
         } 
 
         if (scatcs) {
