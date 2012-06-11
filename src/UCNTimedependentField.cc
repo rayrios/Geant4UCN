@@ -243,8 +243,8 @@ G4ThreeVector UCNTimedependentField::GetGradient(const G4double& x, const G4doub
  	G4double gr = 81.*a*a*exp(-18.*z*z/m/m)*sqrt(r2)*z*z/m/m/denominator;
  	G4double gx = gr*cos(atan2(y,x));
  	G4double gy = gr*sin(atan2(y,x));
- 	G4double gz = a*exp(-36.*z*z/m/m)*z/m*
-        	(-18.*b*exp(27.*z*z/m/m) + a*exp(18.*z*z/m/m)*(-18. + r2*(81. - 1458.*z*z/m/m)))/denominator;
+ 	G4double gz = a*z/m*
+        	(-18.*b*exp(-9.*z*z/m/m) + a*exp(-18.*z*z/m/m)*(-18. + r2*(81. - 1458.*z*z/m/m)))/denominator;
 
  		simple_grad.setX(gx);
  		simple_grad.setY(gy);
