@@ -1,79 +1,720 @@
-$Id: README,v 1.1.1.1 2004/10/25 12:36:46 kuzniak Exp $
--------------------------------------------------------------------
+=======================================================
+=======================================================
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+GEANT4 UCN                                      12.9.04
 
-                            field02 
-                            -------
+modified:         
+12.9.04 peter fierlinger
+=======================================================
 
-    Test for investigation of tracking in electric field 
-    and field dependent electromagnetic processes.
-
+- Particle
+==========	
 	
- 1- GEOMETRY DEFINITION
- 
- 	The "absorber" is a solid made of a given material.                
- 	
- 	Three parameters define the absorber :
- 	- the material of the absorber,
-	- the thickness of an absorber,
- 	- the transverse size of the absorber (the input face is a square). 
-    
-        The volume "World" contains the "absorber". 
-        In this test the parameters of the "World" can be changed , too.
+	- particle UCN, similar to the neutron
+		885.7 s lifetime
 
- 	In addition a transverse uniform magnetic field can be applied.
- 	
- 	The default geometry is constructed in DetectorConstruction class,
- 	but all the parameters can be changed via
- 	the commands defined in the DetectorMessenger class.
- 	
- 2- AN EVENT : THE PRIMARY GENERATOR
- 
- 	The primary kinematic consists of a single particle which hits the
- 	absorber perpendicular to the input face. The type of the particle
- 	and its energy are set in the PrimaryGeneratorAction class, and can
- 	be changed via the G4 build-in commands of ParticleGun class (see
- 	the macros provided with this example).
- 	
- 	A RUN is a set of events.
- 	
- 3- DETECTOR RESPONSE
-
- 
- 	A HIT is a record, event per event , of all the 
- 	informations needed to simulate and analyse the detector response.
- 	
- 	In this example a CalorHit is defined as a set of 2 informations:
- 	- the total energy deposit in the absorber,
- 	- the total tracklength of all charged particles in the absorber,  
- 	
- 	Therefore  the absorber is declared
- 	'sensitive detector' (SD), which means they can contribute to the hit.
- 				
- 4- PHYSICS DEMO
- 
- 	The particle's type and the physic processes which will be available
- 	in this example are set in PhysicsList class.
- 	
- 	The  messenger classes introduce interactive commands . Using these
-        commands the geometry of the detector, the data of the primary
-        particle, etc. can be changed.
- 	
-
- 5- HOW TO START ?
- 
- 	- compile and link to generate an executable
- 		% cd $G4INSTALL/example/extended/field/field02
- 		% gmake
- 		
- 	- execute field02 in 'batch' mode from macro file e.g.
- 		% $(G4INSTALL)/bin/$(G4SYSTEM)/field02 field02.in
 		
- 	- execute field02 in 'interactive' mode with visualization e.g.
- 		% $(G4INSTALL)/bin/$(G4SYSTEM)/field02
-		....
-		Idle> type your commands
-		....
+- Primaries
+==========
+
+	- incident UCN distributions
+	- randomseed for UCN distributions
+	- production time of a particle
+	- spin is set via the spin class
+				
+- Geometry
+==========
+	
+	- material property table for UCN interactions:
+		fermipot, scattering, loss and absorption
+	- predefined: Be, Fe, Ni, Ni58
+				
+- Forces
+========
+	- Gravity
+	
+	- Timedependent Magnetic Field
+		field via formula / *field card 
+		time dependence via file
+		spin follows adiabatically: only + or - spin relative to the field
+	
+			
+- Processes
+===========
+
+	- Production
+		set all beginning properties,
+		can be a specific distributon or user defined
+	
+	- Decay
+		beta decay of the free neutron
+		
+	- Material Boundary
+		Fermipotential
+		Reflection
+		Loss
+		Spinflip
+		*energychange on spinflip
+		Index of Refraction
+		Reflectivity
+		read shutter states from a macrofile,
+		change materialproperties for open/closed shutters
+		(roughness model to be put in function "loss"
+		
+	- Absorption
+		1/v absorption cross section
+		constant loss cross section (upscattering)
+				
+	- Multiple Scattering
+		elastic scattering
+		*small angle scattering
+		
+	- Spin tracking
+		set initial values of the spin vector, 
+		connect to the field and the polarization vector
+		update spin angle during tracking, here we use only the
+		adiabatic case, so only the angle is interesting
+	
+		low field transitions and spin flip probability
+		
+	- Data output
+		save to file class
+
+- Visualization
+===============
+
+		*fieldpoints
+		- beginning distribution	
+
+		
+- Messengers
+============
+
+	- shutter messenger
+	
+	- save to file messenger
+	
+	- spin messenger
+	
+	- field messenger
+	
+	- primary generator messenger
+
+		
+Classes
+=======
+
+UCNDetector
+
+UCNSaveToFile 
+UCNSaveToFileMessenger
+
+UCNMultiScattering
+
+UCNSimpleAbsorption
+
+UCNSimpleDecay
+
+UCNSimpleLoss
+
+UCNMaterialBoundary
+UCNMaterialBoundaryMessenger
+UCNShutterMessenger
+
+UCNSpin
+UCNSpinMessenger
+
+UCNFieldMessenger
+UCNTimedependentField
+
+UCNEqMagElectricField
+
+UCNUniformGravField
+
+UCNFieldSetup
+UCNFieldSetupMessenger
+
+UCNPrimaryGeneratorAction
+UCNPrimaryGeneratorActionMessenger
+
+UCNDetectorConstruction
+UCNDetectorConstructionMessenger
+
+UCNPhysicsList
+UCNPhysicsListMessenger
+
+UCNTransportation
+
+UCNUCN0
+
+=======================================================
+TO DO's
+==========
+
+fieldpoint card interpolation in new version
+visualisation of the field  in new version
+
+reflectivity for strongly absorbing materials
+timedependent volumes 
+=======================================================
+
+
+Descriptions of classes
+
+UCNUCN0
+-------
+a baryon with 939 MeV mass and no charge is created and called UCN.
+no decaytable is defined here, since for the moment we are not interested in decay
+products. 
+the decay eg. into p and e here for the tracking of secondaries is not included for 
+the moment)
+ 
+UCNTransportation
+-----------------
+small changes necessary to exert a force on an uncharged particle
+in AlongStepGetPhysicalInteractionLength:
+
+   if(pParticleDef->GetParticleName() == "neutron" ||
+    pParticleDef->GetParticleName() == "ucn" ){
+     
+     fieldMgr= fFieldPropagator->FindAndSetFieldManager( track.GetVolume() ); 
+    fieldExertsForce= this->DoesGlobalFieldExist(); 	// For gravity
+  }
+
+  
+UCNPhysicsList
+-----------------
+- a new function that adds all necessary processes for UCN
+void UCNPhysicsList::ConstructUCN(), adds material boundary, scatter, loss, 
+asorption, shutters, spin tracking, decay process (status 15.9.04)
+- the particle UCN is registered in ConstructBarions()
+
+- UCNPhysicsListMessenger: only left from example F02
+
+UCNDetectorConstruction
+-----------------------
+-constructor: constructs the field for the whole geometry
+fEmFieldSetup = new UCNFieldSetup() ;
+
+-DefineMaterials(): defines materials Iron, Nickel, sD2, Nickel58,.. here
+and poduce material properties tables where the empirical parameters for 
+surface interactions Fermipotential, diffuse scattering probability, loss 
+and spinflip per wall collision, and the parameters for inside materials
+loss-, absorption- and scattering cross section are defined (in barn).
+
+diffuse scattering probability means surface reflection following a cosine distribution,
+all other reflections are specular. (this is only a practical approach, but widel used)
+the loss per wall collision eta is the energyindependent coefficent which is the 
+basis for the calculation of the energy-, angular and fermipotentialdependent 
+loss parameter mu.
+
+the loss cross section is not velocity dependent, absorption is scaled with 1/v, the
+cs entered is at thermal velocities (2200m/s). scattering defines the "elastic" scattering
+probability inside a material. 
+
+The attenuation lengths are calculated using the densities defined in the material 
+definitions and the cross sections from the materialproperties.
+  e.g.
+  G4MaterialPropertiesTable *Tsd2 = new G4MaterialPropertiesTable();
+  Tsd2->AddProperty("REFLECTIVITY", PP, SD_REFLECTIVITY,      NUM);
+  Tsd2->AddProperty("DIFFUSION",    PP, SD_DIFFUS,            NUM);
+  Tsd2->AddProperty("FERMIPOT",     PP, SD_POT,               NUM);
+  Tsd2->AddProperty("SPINFLIP",     PP, SD_SPINFLIP,          NUM);
+  Tsd2->AddProperty("LOSS",         PP, SD_ETA              , NUM);
+  Tsd2->AddProperty("LOSSCS",       PP, SD_LOSSCS           , NUM);
+  Tsd2->AddProperty("ABSCS",        PP, SD_ABSCS            , NUM);
+  Tsd2->AddProperty("SCATCS",       PP, SD_SCATCS           , NUM);
+  sD2Material->SetMaterialPropertiesTable(Tsd2);
+
+
+
+-ConstructCalorimeter() is the routine, where we really build our geometry.
+the maximal steplength for each volume can be set here, we use for gravity only a 
+typical length of 1 cm for the world volume (G4UserLimits)
+
+-UCNDetectorConstructionMessenger is a leftover from example F02, to be extended 
+for specific applications.
+
+UCNPrimaryGeneratorAction
+-------------------------
+- the particlename "ucn" is chosen,
+- in GeneratePrimaries() the parameters of the particle are set and the particle
+is produced.
+the parameters are: momentum direction, energy, position and the global time, when the
+particle is produced. The spin is also set here, but the spin is defined elsewhere in the
+class UCNSpin.
+-if the variable usespectrum is set to 1 from the messenger,
+Spectrum() calculates a typical UCN spectrum. vx, vy from -6.8 to 6.8 m/s uniformly
+distributed, vz liearly increasing from 0 to 15 m/s
+if the variable vi is set to 1 the productionpoints are visualized 
+
+UCNPrimaryGeneratorActionMessenger
+----------------------------------
+- we can choose to use a typical (ILL) UCN spectrum for our application
+- the randomseed can be set
+- we can tell the visualization manager to draw the points, where we produce UCN.
+/gun/random 01  
+/gun/usespectrum 01
+/gun/randomseed 9334657
+/gun/visual 01
+
+UCNFieldSetup
+-------------
+the field setup is constructed in the detector construction and arranges all 
+field concerns. 
+- in the constructor:
+an instance of the timedependent field is created, the uniformgravfield is created
+and equations of motion.
+a messenger for the field setup is created. 
+the minimum stepsize and the stepper type are chosen.
+the delta chord is set here.
+
+UCNFieldSetupMessenger
+----------------------
+using this messenger, one an set a stepper type or a minimum step size via macro file.
+(one should also make a shortcut to the deltachord parameter here maybe)
+/field/setStepperType 4  ... 4 is rk4
+/field/setMinStep
+
+
+UCNUniformGravField
+-------------------
+this class supplies the values of the field at the current position during tracking.
+the constructor asks also for the instance of the timedependent field and stores this 
+pointer. the fieldvector which is defined in the fieldsetup is stored here.
+in the GetFieldValue() routine, the new components of the fieldvector are calculated.
+the calculation here takes also into account the influence of a possible timedependent
+field.
+the magnetic field influence and the time dependence of the field are requested from
+the timedependentField class.
+
+UCNTimedependentField
+---------------------
+the constructor creates a messenger and also reads a file with field coordinates.
+(interpolation between fieldcoordinates not implemented here)
+there are several routines to commnicate with the messenger.
+the routines used for the fieldcalculation in the uniformgravfield are 
+GetValue() to get the fieldstrength (mainly for the spin calculation),
+GetGradient() to get the magnetic field interaction at the current position and 
+GetFieldPercentage() which reads the time dependence of the field
+
+UCNFieldMessenger
+-----------------
+This manager is for the communication with the timedependent field and
+sets magnetic field parameters
+field enable, field coordinate file, timedependence enable, timedependence file,
+visualize fieldcoordinates (if a field coordinate file is used),
+start time of the field (when the timedependent field is started corresponding to 
+the global time) 
+/fieldcube/enabled 01
+/fieldcube/starttime 1.234
+/fieldcube/file josef.dat
+/fieldcube/drawfield 01
+/fieldcube/timedependence 01 
+/fieldcube/timefile time.dat
+
+
+UCNEqMagElectricField
+---------------------
+the equations of motion are created from the field setup.
+EvaluateRhsGivenB() calculates the values for the field equation for UCN
+
+UCNSpin
+-------
+this class is a discrete process.
+-in the contructor a messenger is created
+-in posstepdoit()
+the spin is updated for the magnetic field interaction (sent to the timedependent
+field class), 
+if the spintrue variable is set, the spin rotation for the adiabatic case is 
+calculated.
+if the lowfield variable is set, the probability for spinflip during low field
+transitions is calculated.
+-messenger communication routines to set the initial spin (+,-,random) and variables
+
+UCNSpinMessenger
+----------------
+set initial spin, set spin tracking calculation and set low field transition calculation
+(this feature is not implemented here)
+/spin/direction random / + / - to choose a random initial spin 
+/spin/trans 01
+/spin/lowfield 01
+
+UCNShutterMessenger
+-------------------
+messenger class for the material boundary process, it covers all commands relevant for
+the operation of the shutters.
+set shutter number, level, time
+/shutter/open 1 4  ... opens shutter 1 at time 4 s
+/shutter/close 1 5 ... closes  shutter 1 at time 5 s
+set a verbose level
+/shutter/setverbose 012345
+choose, if you want to use shutters
+/shutter/use 01
+
+UCNSimpleDecay
+--------------
+this class is a discrete process.
+- in the constructor a decay time is randomly chosen with an exponential
+distribution, where the lifetime is 885.7 s, corresponding to the current accepted value
+(september 2004)
+- the mean free path is infinite, the process is forced, i.e. called after every step.
+- in the PostStepDoIt routine it is just checked, if the proper time (the time the
+particle exists in the event) is larger than the calculated decay time. 
+then it decays.
+
+UCNMaterialBoundary
+-------------------
+this class is a discrete process.
+- in the constructor a messenger is created
+- the mean free path is infinite, the process is forced.
+- in the PosttepDoIt we check, if we are at a volume boundary or at a 
+materialboundary. 
+if the shutter-use flag is set, it is checked, if we are entering a shutter volume, 
+ if yes, check its current state (referred to the global time),
+  if the shutter is open, change all its properties to 0 and remember these values
+  if the shutter is closed, do nothing.
+ if we leave a shutter volume, and it was opened, we restore the shutters material 
+ properties again and take care that the fermipotential difference between the volumes
+ is correct.
+if the shutterstate changes during the time the particle is inside the volume, it gains 
+the fermipotential of the shutter material when it leaves the shutter volume.
+by changing all materialproperties, also the other processes are influenced and recognize 
+the change.
+
+a shutter is a volume called "Shutter1","Shutter2",..... with arbitrary material
+and consistency.
+the volume can become transparent, i.e. no material related
+processes are carried out during the time the particle is inside the shutter volume.
+the shutter settings (open/close) are specified corresponding to the gloal time
+is specified in a macrofile and read by the messenger class. 
+- in the PostStepDoIt() routine we make sure to be at a geometrical boundary and
+check then, if we enter or leave a shutter volume.
+if we enter a volume, we check the array with shutternumbers, states and time and set the
+shutterstate variable open or close. 
+
+depending on the fermipotential-difference compared to the energy directing 
+vertically to the boundary, the reflection or transmission is calculated:
+
+below the critical velocity, 
+  upscatter or spinflip probabilities are calculated. 
+  if not lost, it will be reflected, and the probability for diffuse or specular
+  reflection is calculated.
+  for the loss calculation a simple surface roughness - loss law is considered in
+  UCNMaterialBoundary::loss(...).
+  the diffuse reflection is just following a (3d) cosine distribution.
+above the critical velocity,  
+  the reflectivity of the material is calculated and the particle might still be 
+  reflected.
+  if it enters the material, the fermipotential-difference is subtracted from the 
+  normal component of the kinetic energy (i know, energies dont have components..)
+  and the new momentum vector is calculated.
+
+the various properties for the calculation of the conditions above are defined in 
+the detectorconstruction,   
+  e.g.
+  Tsd2->AddProperty("REFLECTIVITY", PP, SD_REFLECTIVITY,      NUM);
+  Tsd2->AddProperty("DIFFUSION",    PP, SD_DIFFUS,            NUM);
+  Tsd2->AddProperty("FERMIPOT",     PP, SD_POT,               NUM);
+  Tsd2->AddProperty("SPINFLIP",     PP, SD_SPINFLIP,          NUM);
+  Tsd2->AddProperty("LOSS",         PP, SD_ETA              , NUM);
+  Tsd2->AddProperty("LOSSCS",       PP, SD_LOSSCS           , NUM);
+  Tsd2->AddProperty("ABSCS",        PP, SD_ABSCS            , NUM);
+  Tsd2->AddProperty("SCATCS",       PP, SD_SCATCS           , NUM);
+where 
+REFLECTIVITY 	.... unused,
+DIFFUSION 	.... diffuse scattering probability (1 = 100%) 
+FERMIPOT	.... average Fermipotential of the material in neV
+SPINFLIP	.... probability for a spin flip per wall collision
+LOSS 		.... probability for loss per wall collision ("eta" =
+                     ratio of W/V ,E-independent)
+LOSSCS		.... empirical parameter for energyindependent losses, e.g.
+                     upscattering (T-dependent,...)
+ABSCS		.... absorption cross section at thermal energies in barn,
+                     is scaled with 1/v		       
+SCATCS		.... scattering cross section, the energy of the neutron is 
+		     not changed during this scattering process.
+    
+UCNMaterialBoundaryMessenger
+----------------------------
+in the messenger class for the materialbondary the verbose level (screenoutput)
+can be set. this tasks of this class might still be extended
+/materialboundary/setverbose 01234...
+
+UCNSimpleLoss
+-------------------
+this class is a discrete process.
+- mean free path:
+the property LOSSCS is requested from the materialpropertiestable and together with
+the density of the current material an attenuationlength is calculated.
+- the PostStepDoIt() is only called, if the mean free path is reached.
+if we are not in an open shutter volume, the particle is killed.
+
+UCNSimpleLoss
+-------------
+this class is a discrete process.
+- mean free path:
+the property ABSCS is requested from the materialpropertiestable and together with
+the density of the current material an attenuationlength is calculated.
+The cross section is scaled with the velocity of the neutrons.
+- the PostStepDoIt() is only called, if the mean free path is reached.
+if we are not in an open shutter volume, the particle is killed.
+
+UCNMultiScattering
+------------------
+this class is a continuousdiscrete process, which is used as a discrete process.
+- mean free path:
+the property SCATCS is requested from the materialpropertiestable and together with
+the density of the current material an attenuationlength is calculated.
+- the PostStepDoIt() is only called, if the mean free path is reached.
+if we are not in an open shutter volume, the particle is scattered and a new free path 
+will be calculated the next time.
+- the scattering is carried out in the scatter() routine, at the moment the vector
+is just randomized, the energy stays constant.
+
+UCNDetector
+-----------
+this class is a discrete process and it checks at every geometrical boundary, if 
+the new volume is the detector volume. in this case the particle is killed and
+some numbers are sent to the savetofile class.
+
+UCNSaveToFile 
+-------------
+the savetofile routine is created in the main program and has a static GetMe()
+function to return the pointer to its instance to any class.
+using this pointer, one can use the write function to save all data into a file.
+the filename for storing data and the screen output level can be set via macro file
+
+UCNSaveToFileMessenger
+----------------------
+the filename for the storage of data can be set here
+/saveToFile/filename hias.dat
+the verbose level can be set. (not implemented here)
+
+=======================================================
+
+
+
+UCN_EX1
+Guide transmission example
+==========================
+
+In this example we guide neutrons through material guides, they are affected only by gravity.
+We assume that our neutrons are produced in solid deuterium.
+That means, when they leave the deutrium they get an energy kick of about 100 neV.
+We use a spectrum from 0 to 50 neV, the neutrons are produced directly below the
+surface of the sD2 volume.
+2 cm later a Ni-coated guide starts and leads the UCN to a mirror, which consists of
+magnetized iron (we dont care at the moment about the spins). The neutrons are reflected
+upwards to a second mirror consisting of Ni and go then horizontally through a shutter into
+the storage volume. The storage volume is a horizontal tube consisting of a low loss coated 
+material. at the end is a second shutter mounted, leading to a 90 degree torodial bent 
+Ni tube and finally an other Ni tube leads vertically downwards to the detector.
+On the top of the detector there is an aluminium foil (as a daughter volume of the detector-
+volume) where it is decided if the neutron can enter the detector or not.
+The stepsize must be very small inside the detector since otherwise the foil would not
+be seen by the stepping algorithm.
+
+For demonstration purposes also a timedependent magnetic field is used from z = -100 mm 
+to z = 100 mm, but is not relevant for the current geometry since only neutrons 
+that are scattered away reach this field region. 
+
+The macro file to control the simulation is called UCN_EX1.mac, the time dependent field is
+in the file time.dat, bot files have to be in the binaries directory where the compiled program is.
+
+Macro file:
+
+/shutter/use 1  .... tell the materialboundary process, that you want to use shutters.
+/shutter/close 1 0  ... close the shutter #1 at time 0 s.
+/shutter/open 1 3.7  ... open the shutter #1 at time 3.7 s.
+everytime you build a shutter volume, call it "Shutter1", "Shutter2"..., the commands
+work nly if they find a suitable volume
+
+(for some reason, you need something like
+/shutter/close 1 1000 or open so with a large time longer than your calculation that
+all this works properly) 
+
+/gun/usespectrum 1  .... tell the primarygenerator to use a spectrum, the default cut off is 
+8 m/s. to change this go to the primarygeneratoraction in the generate primaries function
+/gun/randomseed 80008498   .. tell the randomgenertor a initial state 
+/gun/visual 1  or 0  ...  drwa circles at the position where the particles are produced.
+/gun/filltime 5 ... produce neutrons from time 0 to 5 s randomly (for example, to calculate a filltime
+or chopper pulses)
+/run/beamOn 100  ... produce 100 particles
+
+Processes:
+in the routine 
+void UCNPhysicsList::ConstructUCN()
+{
+  // Add UCN processes
+  UCNMaterialBoundary* theMaterialBoundary = new UCNMaterialBoundary();
+  UCNSimpleDecay* theSimpleDecay = new UCNSimpleDecay();
+  UCNSimpleAbsorption* theSimpleAbsorption = new UCNSimpleAbsorption();
+  UCNSimpleLoss* theSimpleLoss = new UCNSimpleLoss();
+  UCNMultiScattering* theMultiScattering = new UCNMultiScattering();
+  UCNSpin* theSpin = new UCNSpin();
+  UCNDetector* theDetector = new UCNDetector();
+....
+
+the processes for UCN are added. the ordering of some processes can be important, 
+to try out the functionality of the processes comment single processes out and look at the result.
+UCNMaterialBoundary.... all wall interactions
+UCNSimpleDecay...deacy of the free neutron
+UCNSimpleAbsorption...1/v absorption
+UCNSimpleLoss... v independent absorption
+UCNMultiScattering.... 4 pi random scattering (would be good, if somebody would implement a formula
+for scattering here, in the function 
+
+G4ThreeVector UCNMultiScattering::scatter(G4ThreeVector){
+
+G4ThreeVector final(0.,0.,1.);
+// make a simple uniform distribution in 4 pi
+// apply scattering
+  // calculate angle phi, theta
+double theta = G4UniformRand() * pi;
+//G4cout << "angle " << phi << G4endl;
+double phi = G4UniformRand() * 2 * pi;
+final.rotateY(theta);
+final.rotateZ(phi);
+final = final.unit();
+
+return final;
+}
+
+UCNSpin ... calculates (simple classical) spin precession in the adiabatic case, 
+only the angle. details are not updated up to now.
+
+UCNDetector... looks, if we reach our detector ("det") through it entrance side with an
+aluminim foil. if this is the case, we write some data output to the saveToFile class.
+
+The saveToFile class can be accessed from everywhere if you include the header file and the two
+lines as in the class UCNDetector::PostStepDoIt(..).
+
+
+
+Geometry:
+The geometry is defined in the detectorcontruction. in the DefineMaterials() routine the materials
+have to be defined (things like density are important for absorption length or so in materials)
+Then we have thngs like MaterialPropertiesTables defined here. Here we give our materials
+properties like the cross section, fermipotential and so on.
+
+when you construct your geometry you need a solid:
+e.g. G4Tubs* solidNI = new G4Tubs("NI",t1innerradius,t1radius,t1thickness/2.,0.,twopi); 
+using this one makes a logical volume with a material, e.g.      
+G4LogicalVolume*   logicNI = new G4LogicalVolume(solidNI, Nickel58Material,"NI");   
+this volume needs to be placed in our world or an other mother volume:   
+G4RotationMatrix rot; rot.rotateX(phi);
+G4VPhysicalVolume* physiNI;
+      			physiNI = new G4PVPlacement(
+      			G4Transform3D(rot,G4ThreeVector(x,y,z)),
+                        "NI", logicNI, physiWorld, false, 0);
+
+
+
+Particle Generator:
+in the UCNPrimaryGeneratorAction::GeneratePrimaries(...)
+				
+the particle's properties are set.
+  particleGun->SetParticleTime(time);
+  particleGun->SetParticlePolarization(spin);
+  particleGun->SetParticleMomentumDirection(momentum);
+  particleGun->SetParticleEnergy(n_energy*1e-9 *eV);
+  particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+here we produce it   
+  particleGun->GeneratePrimaryVertex(anEvent);
+
+  		
+			
+UCN_EX2
+storage example (UCN Source)
+==========================
+This example uses a material bottle as a storage volume, the neutrons are
+affected by gravity.
+The bottle is filled from below with a Ni58 coated guide. at the bottle bottom entrance a shutter
+is placed, which can be opened and closed via macro file. The exit guide is at 250 mm height above
+the bottle in radial direction, at its end is a bend downwards and a shutter with an aluminium 
+window. the beginning of the exit guide is also closed with a shutter.
+
+The macro file to control the simulation is called UCN_EX2.mac, the time dependent field is
+in the file time.dat, bot files have to be in the binaries directory where the compiled program is.
+(anyway, not relevant for this application now)
+
+Macro file:
+
+/shutter/use 1  .... tell the materialboundary process, that you want to use shutters.
+/shutter/close 1 0  ... close the shutter #1 at time 0 s.
+/shutter/open 1 3.7  ... open the shutter #1 at time 3.7 s.
+everytime you build a shutter volume, call it "Shutter1", "Shutter2"..., the commands
+work nly if they find a suitable volume
+
+(for some reason, you need something like
+/shutter/close 1 1000 or open so with a large time longer than your calculation that
+all this works properly) 
+
+/gun/usespectrum 1  .... tell the primarygenerator to use a spectrum, the default cut off is 
+8 m/s. to change this go to the primarygeneratoraction in the generate primaries function
+/gun/randomseed 80008498   .. tell the randomgenertor a initial state 
+/gun/visual 1  or 0  ...  drwa circles at the position where the particles are produced.
+/gun/filltime 5 ... produce neutrons from time 0 to 5 s randomly (for example, to calculate a filltime
+or chopper pulses)
+/run/beamOn 100  ... produce 100 particles
+
+
+
+
+UCN_EX3
+magnetic storage example (depol - experiment priciple)
+==========================
+This example uses a combined material, gravitational and magnetic bottle as a storage volume
+the neutrons are filled in from below for some time, while the magnetic field is slowly
+turned on. One spin component will be trapped then and parameters like the loss probability per
+wall collision can be studied.
+
+The particle is produced somewere inside the volume while the magnetic field is turned on.
+after some time the field is switched off and the particle escapes through the bottom.
+
+Macro file:
+
+/fieldcube/enabled 1  ... the word fieldcube originates from the first approach to use field-
+coordinates to calculate fieldstrength and gradients at each point in space. now it
+only says if you want to use a magnetic field or not.
+# if we use fieldcube = 1 , we need a file with data
+/fieldcube/file magfield.dat ... file with field coordinates.
+
+# when does our field start in seconds
+/fieldcube/starttime 0   ... beginning time of the time dependence, practically always 0 s.
+/fieldcube/timedependence 1 ... if there is a time dependent field
+if there is a timedependence, we need a file for this
+/fieldcube/timefile time.dat
+# visualization of the fieldpoints
+/fieldcube/drawfield 0
+
+/run/beamOn 100  ... produce 100 particles
+
+UCNExample 4
+==========================
+this example is the "basic" example which shows the principle of the code,
+the other examples are maybe too detailed for beginning.
+
+A particle is bouncing with gravity on a reflecting mirror and finally hits a detector 
+
+The number of particles produced can be set in the macrofile:
+/run/beamOn 100  ... produce 100 particles
+
+if the verbose levels are changed, the screen output can be made more detailed 
+(screen output slows simulations down typically).
+the place, momentum and energy of particle when it is produced 
+can be chosen in the primary generator.
+the processes used can be changed in the physicslist,
+an example to see more screen output would be to change the verbose level for the 
+material boundary process
+/materialboundary/setverbose 5 
+in the macro file
+
+
+
+
+
+
+
+
