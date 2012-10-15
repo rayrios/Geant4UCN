@@ -1,0 +1,62 @@
+$Id: History,v 1.1.1.1 2004/10/25 12:36:46 kuzniak Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    field02 History file
+                    ------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Nov 25th, 2003 Gabriele Cosmo
+-----------------------------
+- Open geometry before clearing stores in DetectorConstruction class.
+
+Nov 13th, 2003 - John Allison
+-----------------------------
+- Removed OPACS from Vis Manager.
+
+Nov 12th, 2003 - J.Apostolakis (fieldex-V05-02-01)
+------------------------------
+- Revised to work with new field tags (field-V05-02-04 and later)
+   * creation of chord finder for electric field must be explicit
+- Created helper class F02ElectricFieldSetup, using nearly all of 
+  F02ElectroMagneticField, but not being a field.
+- Changed other parts to use this class.
+
+Aug 27th, 2003 V.Ivantchenko (fieldex-V05-02-00)
+------------------------------------------------
+- Removed obsolete interfaces
+
+Jun 25th, 2003 - G.Cosmo (fieldex-V05-01-00)
+--------------------------------------------
+- Fixed mechanism for update of geometry in detector-construction.
+- Fixed pedantic warnings ...
+
+Feb 20th, 2003 - V.Ivanchenko (field-V05-00-00)
+-------------------------------------------------
+- Cut per region
+
+Dec 4th, 2001 - G.Cosmo (field02-V03-02-01)
+-----------------------
+- Fix in F02ElectroMagneticField.hh for compilation on Win/VC++.
+
+Nov 13th, 2001 - V.Grichine  (field02-V03-02-00)
+---------------------------
+- Added number of variables to steppers in F02ElectroMagneticField.cc.
+  Coworks with tag "field-V03-02-03" of geometry/magneticfield.
+
+Nov 7th, 2001 - G.Cosmo
+-----------------------
+- More cleanup and fixes to primary generator gun (V.Grichine).
+
+Oct 15th, 2001 - G.Cosmo
+------------------------
+- Cleaned from test code.

@@ -1,0 +1,80 @@
+#
+# Macro file for the ucn example 3
+#
+#
+# ----------------------------------
+# control all field functions
+# 
+# are we using a fieldcube 0.. off, > 0 different conditions?
+/fieldcube/enabled 1
+# if we use fieldcube = 1 , we need a file with data
+/fieldcube/file magfield.dat
+
+# when does our field start in seconds
+/fieldcube/starttime 0
+
+# if there is a time dependent field
+/fieldcube/timedependence 1
+# if there is a timedependence, we need a file for this
+/fieldcube/timefile time.dat
+# visualization of the fieldpoints
+/fieldcube/drawfield 0
+
+
+# ----------------------------------
+# initial spin orientation (random, +, -)
+/spin/direction -
+# track the spin (0,1)
+/spin/trans 1
+# track the lowfield transitions of the spin (0,1)
+/spin/lowfield 1
+# ----------------------------------
+# set shutter state (open/close) number(1,2,3,..) time (s) 
+/shutter/use 0
+
+# ----------------------------------
+/saveToFile/filename hallo123.dat
+# ----------------------------------
+# tell the primarygenerator, if we want to use a spectrum for UCN production
+/gun/usespectrum 0 
+# set a randomseed
+/gun/randomseed 80008498
+# draw a circle at each point, where a ucn is produced 1..on, 0..off
+/gun/visual 1
+#set the filltime of the experiment
+/gun/filltime 0
+
+
+# ----------------------------------
+# verbose levels
+/materialboundary/setverbose 0
+/shutter/setverbose 0
+
+
+# ----------------------------------
+#/control/verbose 0
+#/tracking/verbose 0
+#/control/saveHistory
+#/run/verbose 0
+#
+
+# visualization
+/vis/scene/create
+#/vis/open DAWNFILE
+/vis/open OGLSXm
+#/vis/viewer/flush
+/vis/viewer/set/viewpointThetaPhi 90 180 deg
+/vis/viewer/zoom 1
+#/vis/viewer/flush
+
+# add the trajectories
+/tracking/storeTrajectory 1
+/vis/viewer/flush
+
+#ready
+/vis/scene/endOfEventAction accumulate
+
+# start particles
+/run/beamOn 100
+
+

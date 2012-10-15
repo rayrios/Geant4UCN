@@ -1,0 +1,551 @@
+ //This function illustrates the possible ways to define materials
+ 
+  G4String name, symbol ;             // a=mass of a mole;
+  G4double a, z, density ;            // z=mean number of protons;  
+  G4int nel;
+  G4int ncomponents;
+  G4double fractionmass, pressure, temperature;
+
+  a = 1.01*g/mole;
+  G4Element* elH  = new G4Element(name="Hydrogen", symbol="H", z= 1., a);
+  a = 2.0*g/mole;
+  G4Element* elD  = new G4Element(name="Deuterium", symbol="D", z= 1., a);
+  a = 12.01*g/mole;
+  G4Element* elC = new G4Element(name="Carbon", symbol="C", z=6., a);
+  a = 14.01*g/mole;
+  G4Element* elN  = new G4Element(name="Nitrogen", symbol="N", z= 7., a);
+  a = 16.00*g/mole;
+  G4Element* elO  = new G4Element(name="Oxygen", symbol="O", z= 8., a);
+  a = 18.9984*g/mole;
+  G4Element* elF  = new G4Element(name="Fluor", symbol="F", z= 9., a);
+  a = 28.0855*g/mole;
+  G4Element* elSi  = new G4Element(name="Silicon", symbol="Si", z= 14., a);
+  a = 39.948*g/mole;
+  G4Element* elAr = new G4Element(name="Argon", symbol="Ar", z=18., a);
+  a = 9.01*g/mole;
+  G4Element* elBe = new G4Element(name="Beryllium", symbol="Be", z=4., a);  
+  a = 26.98*g/mole;
+  G4Element* elAl = new G4Element(name="Aluminium", symbol="Al", z=13., a);  
+  a = 51.9961*g/mole;
+  G4Element* elCr = new G4Element(name="Chromium", symbol="Cr", z=24., a);  
+  a = 55.8*g/mole;
+  G4Element* elFe = new G4Element(name="Iron", symbol="Fe", z=26., a);
+  a = 58.7*g/mole;
+  G4Element* elNi = new G4Element(name="Nickel", symbol="Ni", z=28., a);
+  a = 58.*g/mole;
+  G4Element* elNi58 = new G4Element(name="Nickel58", symbol="Ni58", z=28., a);
+  a = 95.94*g/mole;
+  G4Element* elMo = new G4Element(name="Molybdenum", symbol="Mo", z=42., a);
+
+
+
+
+  // Vacuum
+  density = universe_mean_density;    //from PhysicalConstants.h
+  pressure = 3.e-18*pascal;
+  temperature = 2.73*kelvin;
+  G4Material* Vacuum = new G4Material(name="Vacuum", z=1., a=1.01*g/mole, density,
+				    kStateGas,temperature,pressure);
+
+  // solid deuterium  
+  density = 0.2*g/cm3 ;       // STP
+  G4Material* sD2 = new G4Material(name="sD2"  , density, ncomponents=1);
+  sD2->AddElement(elD, 1);
+
+  // Dry air (average composition)
+  density = 1.7836*mg/cm3 ;       // STP
+  G4Material* Argon = new G4Material(name="Argon"  , density, ncomponents=1);
+  Argon->AddElement(elAr, 1);
+
+  density = 1.25053*mg/cm3 ;       // STP
+  G4Material* Nitrogen = new G4Material(name="N2"  , density, ncomponents=1);
+  Nitrogen->AddElement(elN, 2);
+
+  density = 1.4289*mg/cm3 ;       // STP
+  G4Material* Oxygen = new G4Material(name="O2"  , density, ncomponents=1);
+  Oxygen->AddElement(elO, 2);
+
+  density = 1.2928*mg/cm3 ;       // STP
+  temperature = STP_Temperature;
+  pressure = 1.0e-0*STP_Pressure;
+  G4Material* Air = new G4Material(name="Air"  , density, ncomponents=3,
+                                   kStateGas,temperature,pressure);
+  Air->AddMaterial( Nitrogen, fractionmass = 0.7557 ) ;
+  Air->AddMaterial( Oxygen,   fractionmass = 0.2315 ) ;
+  Air->AddMaterial( Argon,    fractionmass = 0.0128 ) ;
+
+  // Beryllium
+  density = 1.848*g/cm3;
+  G4Material* Beryllium1 = new G4Material(name="Beryllium", density, nel=1);
+  Beryllium1->AddElement(elBe,1);
+
+  // Beryllium2
+  density = 1.848*g/cm3;
+  G4Material* Beryllium2 = new G4Material(name="Beryllium2", density, nel=1);
+  Beryllium2->AddElement(elBe,1);
+
+  // Beryllium3
+  density = 1.848*g/cm3;
+  G4Material* Beryllium3 = new G4Material(name="Beryllium3", density, nel=1);
+  Beryllium3->AddElement(elBe,1);
+
+  // Fused Silica
+  density = 2.2*g/cm3;
+  G4Material* Silica = new G4Material(name="Silica", density, nel=2);
+  Silica->AddElement(elO,2);
+  Silica->AddElement(elSi,1);
+
+  // Aluminium
+  density = 2.7*g/cm3;
+  G4Material* Aluminium = new G4Material(name="Aluminium", density, nel=1);
+  Aluminium->AddElement(elAl,1);
+
+  // Aluminium1
+  density = 2.7*g/cm3;
+  G4Material* Aluminium1 = new G4Material(name="Aluminium1", density, nel=1);
+  Aluminium1->AddElement(elAl,1);
+
+  // Chromium
+  density = 7.24*g/cm3;
+  G4Material* Chromium = new G4Material(name="Chromium", density, nel=1);
+  Chromium->AddElement(elCr,1);
+
+  // Molibden
+  density = 10280*kg/m3;
+  G4Material* Molibden = new G4Material(name="Molibden", density, nel=1);
+  Molibden->AddElement(elMo,1);
+
+  // Iron
+  density = 7.874*g/cm3;
+  G4Material* Iron = new G4Material(name="Iron", density, nel=1);
+  Iron->AddElement(elFe,1);
+
+  // Nickel
+  density = 8.908*g/cm3;
+  G4Material* Nickel = new G4Material(name="Nickel", density, nel=1);
+  Nickel->AddElement(elNi,1);
+
+  // Nickel58
+  density = 8.908*g/cm3;
+  G4Material* Nickel58 = new G4Material(name="Nickel58", density, nel=1);
+  Nickel58->AddElement(elNi58,1);
+
+  // Molibden + Nickel
+  density = 9.04*g/cm3;
+  G4Material* MoNi = new G4Material(name="MoNi", density, ncomponents=2);
+  MoNi->AddMaterial(Nickel58, fractionmass = 0.9);
+  MoNi->AddMaterial(Molibden, fractionmass = 0.1);
+
+  // Stainless Steel type 316 (http://www.pacificfasteners.com/catalog/page29.htm)
+  density = 7.99*g/cm3;
+  G4Material* StainlessSteel316 = new G4Material(name="SSteel316", density, ncomponents=4);
+  StainlessSteel316->AddMaterial(Molibden, fractionmass = .025);
+  StainlessSteel316->AddMaterial(Iron, fractionmass = .685);
+  StainlessSteel316->AddMaterial(Nickel, fractionmass = .12);
+  StainlessSteel316->AddMaterial(Chromium, fractionmass = .17);
+
+  // Aluminium oxide
+  density = 3.97*g/cm3;   // http://www.cerac.com/pubs/proddata/al2o3.htm
+  G4Material* AlOxide = new G4Material(name="Al2O3", density, nel=2);
+  AlOxide->AddElement(elO,3);
+  AlOxide->AddElement(elAl,2);    
+  
+  // Silicon nitride
+  density = 3.22*g/cm3;
+  G4Material* Si3N4 = new G4Material(name="Si3N4", density, nel=2);
+  Si3N4->AddElement(elSi,3);
+  Si3N4->AddElement(elN,4);
+
+  // Glass
+  density = 2.2*g/cm3;
+  G4Material* Glass = new G4Material(name="Glass", density, nel=2);
+  Glass->AddElement(elO,2);
+  Glass->AddElement(elSi,1);
+
+  // UVFS Glass
+  density = 2.2*g/cm3;
+  G4Material* UVFS = new G4Material(name="UVFS Glass", density, nel=2);
+  UVFS->AddElement(elO,2);
+  UVFS->AddElement(elSi,1);
+  
+  // Teflon
+  density = 2.2*g/cm3;
+  G4Material* Teflon = new G4Material(name="Teflon", density, nel=2);
+  Teflon->AddElement(elC,1);
+  Teflon->AddElement(elF,2);
+  
+
+//  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+
+  
+  const G4int NUM = 2;
+  G4double PP[NUM] =  {1.0, 1.0};
+
+  /// material properties
+  // i prefer to calculate the potential of each material extra instead of using
+  // scatteringlength, molweight and density, since many parameters for UCN in reality 
+  // are slightly different to the calculated ones...
+
+  // parameters SCATCS and ABSCS taken from:
+  // http://rrdjazz.nist.gov/resources/n-lengths/list.html
+ 
+
+
+  // --- Diamond Like Carbon
+
+  G4double DLC_POT[NUM] =         	{225.0,		225.0};		// The nEDM Progress Report (March 2003), page 5
+  G4double DLC_SPINFLIP[NUM] =		{0.0,		0.0};
+  G4double DLC_ETA[NUM] =          	{3.0e-4,	3.0e-4}; 		// ??
+  G4double DLC_DIFFUS[NUM] =       	{0.10,		0.10};    
+  G4double DLC_REFLECTIVITY[NUM] =     	{1.0,		1.0};		// not used
+  G4double DLC_ABSCS[NUM] =       	{0.0035,	0.0035};    	// (value for C)
+  G4double DLC_LOSSCS[NUM] =       	{0.0, 		0.0};    	// ??
+  G4double DLC_SCATCS[NUM] =       	{5.551, 	5.551};    	// (value for C)
+  G4MaterialPropertiesTable *Tdlc = new G4MaterialPropertiesTable();
+  Tdlc->AddProperty("REFLECTIVITY", PP, DLC_REFLECTIVITY,      NUM);
+  Tdlc->AddProperty("DIFFUSION",    PP, DLC_DIFFUS,            NUM);
+  Tdlc->AddProperty("FERMIPOT",     PP, DLC_POT,               NUM);
+  Tdlc->AddProperty("SPINFLIP",     PP, DLC_SPINFLIP,          NUM);
+  Tdlc->AddProperty("LOSS",         PP, DLC_ETA              , NUM);
+  Tdlc->AddProperty("LOSSCS",       PP, DLC_LOSSCS           , NUM);
+  Tdlc->AddProperty("ABSCS",        PP, DLC_ABSCS            , NUM);
+  Tdlc->AddProperty("SCATCS",       PP, DLC_SCATCS           , NUM);
+
+/*  G4MaterialPropertiesTable *T2 = new G4MaterialPropertiesTable();
+  T2->AddProperty("REFLECTIVITY", PP, DLC_REFLECTIVITY,      NUM);
+  T2->AddProperty("DIFFUSION",    PP, DLC_DIFFUS,         NUM);
+  T2->AddProperty("FERMIPOT",     PP, DLC_POT,               NUM);
+  T2->AddProperty("SPINFLIP",     PP, DLC_SPINFLIP,       NUM);
+  T2->AddProperty("LOSS",         PP, DLC_ETA           , NUM);
+  T2->AddProperty("LOSSCS",       PP, DLC_LOSSCS           , NUM);
+  T2->AddProperty("ABSCS",        PP, DLC_ABSCS            , NUM);
+  T2->AddProperty("SCATCS",       PP, DLC_SCATCS           , NUM);
+*/
+  // --- DPS Coating (C8D8)
+
+  G4double DPS_POT[NUM] =         	{161.0,		161.0};		// D.J.R. May, Table 2.24, page 15 
+  G4double DPS_SPINFLIP[NUM] =		{0.0,		0.0};
+  G4double DPS_ETA[NUM] =          	{0.0005,	0.0005}; 	// D.J.R. May, Figure 4.5, page 106 
+  G4double DPS_DIFFUS[NUM] =       	{0.10,		0.10};    	// D.J.R. May, Figure 4.5, page 106 
+  G4double DPS_REFLECTIVITY[NUM] =     	{1.0,		1.0};		// not used
+  G4double DPS_ABSCS[NUM] =       	{0.00047,	0.00047};    	// weighted average (C, D)
+  G4double DPS_LOSSCS[NUM] =       	{0.0, 		0.0};    	// ??
+  G4double DPS_SCATCS[NUM] =       	{7.15,		7.15};    	// weighted average (C, D)
+  G4MaterialPropertiesTable *Tdps = new G4MaterialPropertiesTable();
+  Tdps->AddProperty("REFLECTIVITY", PP, DPS_REFLECTIVITY,	NUM);
+  Tdps->AddProperty("DIFFUSION",    PP, DPS_DIFFUS,		NUM);
+  Tdps->AddProperty("FERMIPOT",     PP, DPS_POT,		NUM);
+  Tdps->AddProperty("SPINFLIP",     PP, DPS_SPINFLIP,		NUM);
+  Tdps->AddProperty("LOSS",         PP, DPS_ETA, 		NUM);
+  Tdps->AddProperty("LOSSCS",       PP, DPS_LOSSCS,		NUM);
+  Tdps->AddProperty("ABSCS",        PP, DPS_ABSCS,		NUM);
+  Tdps->AddProperty("SCATCS",       PP, DPS_SCATCS, 		NUM);
+
+ // --- DPE Coating (C2D2)
+
+  G4double DPE_POT[NUM] =               {214.0,         214.0};         // D.J.R. May, Table 2.24, page 15
+  G4double DPE_SPINFLIP[NUM] =          {0.0,           0.0};
+  G4double DPE_ETA[NUM] =               {0.0003,        0.0003};        // D.J.R. May, Figure 4.5, page 106
+  G4double DPE_DIFFUS[NUM] =            {0.10,          0.10};          // D.J.R. May, Figure 4.5, page 106
+  G4double DPE_REFLECTIVITY[NUM] =      {1.0,           1.0};           // not used
+  G4double DPE_ABSCS[NUM] =             {0.00047,       0.00047};       // weighted average (C, D)
+  G4double DPE_LOSSCS[NUM] =            {0.0,           0.0};           // ??
+  G4double DPE_SCATCS[NUM] =            {7.15,          7.15};          // weighted average (C, D)
+  G4MaterialPropertiesTable *Tdpe = new G4MaterialPropertiesTable();
+  Tdpe->AddProperty("REFLECTIVITY", PP, DPE_REFLECTIVITY,       NUM);
+  Tdpe->AddProperty("DIFFUSION",    PP, DPE_DIFFUS,             NUM);
+  Tdpe->AddProperty("FERMIPOT",     PP, DPE_POT,                NUM);
+  Tdpe->AddProperty("SPINFLIP",     PP, DPE_SPINFLIP,           NUM);
+  Tdpe->AddProperty("LOSS",         PP, DPE_ETA,                NUM);
+  Tdpe->AddProperty("LOSSCS",       PP, DPE_LOSSCS,             NUM);
+  Tdpe->AddProperty("ABSCS",        PP, DPE_ABSCS,              NUM);
+  Tdpe->AddProperty("SCATCS",       PP, DPE_SCATCS,             NUM);
+
+  // --- Fused Silica
+
+  G4double SI_POT[NUM] =         	{90.0,		90.0};		// The nEDM Progress Report (March 2003), page 6
+  G4double SI_SPINFLIP[NUM] =      	{0.0,		0.0};   	// rel. per wall collision                           ??
+  G4double SI_ETA[NUM] =          	{3.0e-4,	3.0e-4};       	// loss coefficient W/V                              ??
+  G4double SI_DIFFUS[NUM] =       	{0.10,		0.10};    	// diffuse scattering probability
+  G4double SI_REFLECTIVITY[NUM] =     	{1.0,		1.0};   	// reflectivity, not used parameter
+  G4double SI_ABSCS[NUM] =       	{0.08,		0.08};    	// weighted average (Si, O)
+  G4double SI_LOSSCS[NUM] =       	{0.0, 		0.0};    	// loss cross section at room temperature for Be     ??
+  G4double SI_SCATCS[NUM] =       	{3.27, 		3.27};    	// weighted average (Si, O)
+  G4MaterialPropertiesTable *Tsilica = new G4MaterialPropertiesTable();
+  Tsilica->AddProperty("REFLECTIVITY", PP, SI_REFLECTIVITY,      NUM);
+  Tsilica->AddProperty("DIFFUSION",    PP, SI_DIFFUS,            NUM);
+  Tsilica->AddProperty("FERMIPOT",     PP, SI_POT,               NUM);
+  Tsilica->AddProperty("SPINFLIP",     PP, SI_SPINFLIP,          NUM);
+  Tsilica->AddProperty("LOSS",         PP, SI_ETA              , NUM);
+  Tsilica->AddProperty("LOSSCS",       PP, SI_LOSSCS           , NUM);
+  Tsilica->AddProperty("ABSCS",        PP, SI_ABSCS            , NUM);
+  Tsilica->AddProperty("SCATCS",       PP, SI_SCATCS           , NUM);
+
+  // --- Stainless Steel type 316
+
+  G4double SS_POT[NUM] =         	{185.0,		185.0};		// D.J.R. May, Table 2.24, page 15
+  G4double SS_SPINFLIP[NUM] =      	{0.0,		0.0};   	// ??
+  G4double SS_ETA[NUM] =          	{12.5e-5,	12.5e-5};       // Gollub, 
+  G4double SS_DIFFUS[NUM] =       	{0.01,		0.01};    	// 
+  G4double SS_REFLECTIVITY[NUM] =     	{1.0,		1.0};   	// reflectivity, not used parameter
+  G4double SS_ABSCS[NUM] =       	{2.95,		2.95};    	// weighted average (Fe, Ni, Cr, Mo)
+  G4double SS_LOSSCS[NUM] =       	{0.0, 		0.0};    	// ??
+  G4double SS_SCATCS[NUM] =       	{10.84,		10.84};    	// weighted average (Fe, Ni, Cr, Mo)
+  G4MaterialPropertiesTable *Tsteel316 = new G4MaterialPropertiesTable();
+  Tsteel316->AddProperty("REFLECTIVITY", PP, SS_REFLECTIVITY,      NUM);
+  Tsteel316->AddProperty("DIFFUSION",    PP, SS_DIFFUS,            NUM);
+  Tsteel316->AddProperty("FERMIPOT",     PP, SS_POT,               NUM);
+  Tsteel316->AddProperty("SPINFLIP",     PP, SS_SPINFLIP,          NUM);
+  Tsteel316->AddProperty("LOSS",         PP, SS_ETA              , NUM);
+  Tsteel316->AddProperty("LOSSCS",       PP, SS_LOSSCS           , NUM);
+  Tsteel316->AddProperty("ABSCS",        PP, SS_ABSCS            , NUM);
+  Tsteel316->AddProperty("SCATCS",       PP, SS_SCATCS           , NUM);
+
+  // --- Ni + Mo coating
+
+  G4double MONI_POT[NUM] =         	{317.77,	317.77};	// (D.J.R. May, page 105: v_c = 7.92 [m/s]) Serebrov's limit = 7.8 m/s
+  G4double MONI_SPINFLIP[NUM] =      	{0.0,		0.0};   	// rel. per wall collision 
+  // G4double MONI_ETA[NUM] =          	{8.6e-5,	8.6e-5};        // Gollub, Table 2.1                          (for 58Ni)
+  G4double MONI_ETA[NUM] =          	{2.0e-4,	2.0e-4};        // realistic value
+  G4double MONI_DIFFUS[NUM] =       	{0.01,		0.01};    	// diffuse scattering probability
+  G4double MONI_REFLECTIVITY[NUM] =     {1.0,		1.0};   	// reflectivity, not used parameter
+  G4double MONI_ABSCS[NUM] =       	{4.71,		4.71};    	// 1/v loss cross section at room temperature (average)
+  G4double MONI_LOSSCS[NUM] =       	{0.0, 		0.0};    	// loss cross section at room temperature     ??
+  G4double MONI_SCATCS[NUM] =       	{23.74,		23.74};    	// (incoherent) "elastic" scattering cs       (average)
+  G4MaterialPropertiesTable *Tmoni = new G4MaterialPropertiesTable();
+  Tmoni->AddProperty("REFLECTIVITY", PP, MONI_REFLECTIVITY,      NUM);
+  Tmoni->AddProperty("DIFFUSION",    PP, MONI_DIFFUS,            NUM);
+  Tmoni->AddProperty("FERMIPOT",     PP, MONI_POT,               NUM);
+  Tmoni->AddProperty("SPINFLIP",     PP, MONI_SPINFLIP,          NUM);
+  Tmoni->AddProperty("LOSS",         PP, MONI_ETA              , NUM);
+  Tmoni->AddProperty("LOSSCS",       PP, MONI_LOSSCS           , NUM);
+  Tmoni->AddProperty("ABSCS",        PP, MONI_ABSCS            , NUM);
+  Tmoni->AddProperty("SCATCS",       PP, MONI_SCATCS           , NUM);
+ 
+  // --- Ni
+
+  G4double NI_POT[NUM] =         	{252.0,		252.0};		// Gollub, Table 2.1
+  G4double NI_SPINFLIP[NUM] =      	{0.0,		0.0};   	// rel. per wall collision
+  G4double NI_ETA[NUM] =          	{12.5e-5,	12.5e-5};       // Gollub, Table 2.1
+  G4double NI_DIFFUS[NUM] =       	{0.01,		0.01};    	// diffuse scattering probability
+  G4double NI_REFLECTIVITY[NUM] =     	{1.0,		1.0};   	// reflectivity, not used parameter
+  G4double NI_ABSCS[NUM] =       	{4.49,		4.49};    	// 1/v loss cross section at room temperature
+  G4double NI_LOSSCS[NUM] =       	{0.0, 		0.0};    	// loss cross section at room temperature
+  G4double NI_SCATCS[NUM] =       	{18.5,		18.5};    	// (incoherent) "elastic" scattering cs
+  G4MaterialPropertiesTable *Tnickel = new G4MaterialPropertiesTable();
+  Tnickel->AddProperty("REFLECTIVITY", PP, NI_REFLECTIVITY,      NUM);
+  Tnickel->AddProperty("DIFFUSION",    PP, NI_DIFFUS,            NUM);
+  Tnickel->AddProperty("FERMIPOT",     PP, NI_POT,               NUM);
+  Tnickel->AddProperty("SPINFLIP",     PP, NI_SPINFLIP,          NUM);
+  Tnickel->AddProperty("LOSS",         PP, NI_ETA              , NUM);
+  Tnickel->AddProperty("LOSSCS",       PP, NI_LOSSCS           , NUM);
+  Tnickel->AddProperty("ABSCS",        PP, NI_ABSCS            , NUM);
+  Tnickel->AddProperty("SCATCS",       PP, NI_SCATCS           , NUM);
+
+  // --- Al 
+
+  G4double AL_POT[NUM] =         	{54.0,		54.0};		// Gollub, Table 2.1
+  G4double AL_SPINFLIP[NUM] =      	{0.0,		0.0};   	// rel. per wall collision
+  G4double AL_ETA[NUM] =          	{2.25e-5,	2.25e-5};       // Gollub, Table 2.1
+  G4double AL_DIFFUS[NUM] =       	{0.0,		0.0};    	// diffuse scattering probability
+  G4double AL_REFLECTIVITY[NUM] =     	{1.0,		1.0};   	// reflectivity, not used parameter
+  G4double AL_ABSCS[NUM] =       	{0.231,		0.231};    	// 1/v loss cross section at room temperature
+  G4double AL_LOSSCS[NUM] =       	{0.0, 		0.0};    	// loss cross section at room temperature
+  G4double AL_SCATCS[NUM] =       	{1.503,		1.503};    	// (incoherent) "elastic" scattering cs
+  G4MaterialPropertiesTable *Talu = new G4MaterialPropertiesTable();
+  Talu->AddProperty("REFLECTIVITY", PP, AL_REFLECTIVITY,      NUM);
+  Talu->AddProperty("DIFFUSION",    PP, AL_DIFFUS,            NUM);
+  Talu->AddProperty("FERMIPOT",     PP, AL_POT,               NUM);
+  Talu->AddProperty("SPINFLIP",     PP, AL_SPINFLIP,          NUM);
+  Talu->AddProperty("LOSS",         PP, AL_ETA              , NUM);
+  Talu->AddProperty("LOSSCS",       PP, AL_LOSSCS           , NUM);
+  Talu->AddProperty("ABSCS",        PP, AL_ABSCS            , NUM);
+  Talu->AddProperty("SCATCS",       PP, AL_SCATCS           , NUM);
+
+  // -- Ni58
+
+  G4double NI58_POT[NUM] =         	{335.0,		335.0};		// Gollub, Table 2.1
+  G4double NI58_SPINFLIP[NUM] =      	{0.0,		0.0};   	// rel. per wall collision
+  G4double NI58_ETA[NUM] =          	{8.6e-5,	8.6e-5};        // Gollub, Table 2.1
+  G4double NI58_DIFFUS[NUM] =       	{0.01,		0.01};    	// diffuse scattering probability
+  G4double NI58_REFLECTIVITY[NUM] =     {1.0,		1.0};   	// reflectivity, not used parameter
+  G4double NI58_ABSCS[NUM] =       	{4.6,		4.6};    	// 1/v loss cross section at room temperature
+  G4double NI58_LOSSCS[NUM] =       	{0.0, 		0.0};    	// loss cross section at room temperature
+  G4double NI58_SCATCS[NUM] =       	{26.1,		26.1};    	// (incoherent) "elastic" scattering cs
+  G4MaterialPropertiesTable *Tnickel58 = new G4MaterialPropertiesTable();
+  Tnickel58->AddProperty("REFLECTIVITY", PP, NI58_REFLECTIVITY,      NUM);
+  Tnickel58->AddProperty("DIFFUSION",    PP, NI58_DIFFUS,            NUM);
+  Tnickel58->AddProperty("FERMIPOT",     PP, NI58_POT,               NUM);
+  Tnickel58->AddProperty("SPINFLIP",     PP, NI58_SPINFLIP,          NUM);
+  Tnickel58->AddProperty("LOSS",         PP, NI58_ETA              , NUM);
+  Tnickel58->AddProperty("LOSSCS",       PP, NI58_LOSSCS           , NUM);
+  Tnickel58->AddProperty("ABSCS",        PP, NI58_ABSCS            , NUM);
+  Tnickel58->AddProperty("SCATCS",       PP, NI58_SCATCS           , NUM);
+
+  
+/*  G4double POT[NUM] =         	{103.0,		103.0};		// neV
+  G4double BE_SPINFLIP[NUM] =   {0.0,		0.0};   	// rel. per wall collision
+  // G4double BE_ETA[NUM] =     {1e-4,		1e-4};        	// loss coefficient W/V
+  G4double BE_ETA[NUM] =        {2e-4,		2e-4};        	// realistic value
+  G4double BE_DIFFUS[NUM] =     {0.0,		0.0};    	// diffuse scattering probability
+  G4double REFLECTIVITY[NUM] =  {1.0,		1.0};   	// reflectivity, not used parameter
+  G4double ABSCS[NUM] =       	{0.001,		0.001};    	// 1/v loss cross section at room temperature for Be
+  G4double LOSSCS[NUM] =       	{0.0001,	0.0001};    	// loss cross section at room temperature for Be
+  G4double SCATCS[NUM] =       	{0.008,		0.008};    	// (incoherent) "elastic" scattering cs
+  G4MaterialPropertiesTable *T1 = new G4MaterialPropertiesTable();
+  T1->AddProperty("REFLECTIVITY", PP, REFLECTIVITY,      NUM);
+  T1->AddProperty("DIFFUSION",    PP, BE_DIFFUS,         NUM);
+  T1->AddProperty("FERMIPOT",     PP, POT,               NUM);
+  T1->AddProperty("SPINFLIP",     PP, BE_SPINFLIP,       NUM);
+  T1->AddProperty("LOSS",         PP, BE_ETA, 		 NUM);
+  T1->AddProperty("LOSSCS",       PP, LOSSCS           , NUM);
+  T1->AddProperty("ABSCS",        PP, ABSCS            , NUM);
+  T1->AddProperty("SCATCS",       PP, SCATCS           , NUM);
+  */
+
+  // --- Beryllium
+
+  G4double BE_POT[NUM] =          {250.0,	250.0};      	// neV
+  G4double BE_SPINFLIP[NUM] =     {0.0,		0.0};		// rel. per wall collision
+  // G4double BE_ETA[NUM] =          {3e-5,	3e-5};        	// loss coefficient W/V
+  G4double BE_ETA[NUM] =          {2e-4,	2e-4};        	// realistic value
+  G4double BE_DIFFUS[NUM] =       {0.1,		0.1};    	// diffuse scattering probability
+  G4double BE_REFLECTIVITY[NUM] = {1.0,		1.0};   	// reflectivity, not used parameter
+  G4double BE_ABSCS[NUM] =        {0.00001,	0.00001};    	// 1/v loss cross section at room temperature for Be
+  G4double BE_LOSSCS[NUM] =       {0., 		0.};    	// loss cross section at room temperature for Be
+  G4double BE_SCATCS[NUM] =       {0.08, 	0.08};    	// (incoherent) "elastic" scattering cs
+  G4MaterialPropertiesTable *Tbe = new G4MaterialPropertiesTable();
+  Tbe->AddProperty("REFLECTIVITY", PP, BE_REFLECTIVITY,      NUM);
+  Tbe->AddProperty("DIFFUSION",    PP, BE_DIFFUS,         NUM);
+  Tbe->AddProperty("FERMIPOT",     PP, BE_POT,               NUM);
+  Tbe->AddProperty("SPINFLIP",     PP, BE_SPINFLIP,       NUM);
+  Tbe->AddProperty("LOSS",         PP, BE_ETA,            NUM);
+  Tbe->AddProperty("LOSSCS",       PP, BE_LOSSCS           , NUM);
+  Tbe->AddProperty("ABSCS",        PP, BE_ABSCS            , NUM);
+  Tbe->AddProperty("SCATCS",       PP, BE_SCATCS           , NUM);
+
+  G4double SH2_POT[NUM] =         {250.0,	250.0};      	// neV
+  G4double SH2_SPINFLIP[NUM] =    {0.0,		0.0};   	// rel. per wall collision
+  // G4double SH_ETA[NUM] =          {3e-5,	3e-5};        	// loss coefficient W/V
+  G4double SH2_ETA[NUM] =         {2e-4,	2e-4};        	// realistic value
+  G4double SH2_DIFFUS[NUM] =      {0.1,		0.1};    	// diffuse scattering probability
+  G4double SH2_REFLECTIVITY[NUM]= {1.0,		1.0};   	// reflectivity, not used parameter
+  G4double SH2_ABSCS[NUM] =       {0.00001,	0.00001};    	// 1/v loss cross section at room temperature for Be
+  G4double SH2_LOSSCS[NUM] =      {0., 		0.};    	// loss cross section at room temperature for Be
+  G4double SH2_SCATCS[NUM] =      {0.08, 	0.08};    	// (incoherent) "elastic" scattering cs
+  G4MaterialPropertiesTable *T3 = new G4MaterialPropertiesTable();
+  T3->AddProperty("REFLECTIVITY", PP, MONI_REFLECTIVITY,      NUM);
+  T3->AddProperty("DIFFUSION",    PP, MONI_DIFFUS,         NUM);
+  T3->AddProperty("FERMIPOT",     PP, MONI_POT,               NUM);
+  T3->AddProperty("SPINFLIP",     PP, MONI_SPINFLIP,       NUM);
+  T3->AddProperty("LOSS",         PP, MONI_ETA           , NUM);
+  T3->AddProperty("LOSSCS",       PP, MONI_LOSSCS           , NUM);
+  T3->AddProperty("ABSCS",        PP, MONI_ABSCS            , NUM);
+  T3->AddProperty("SCATCS",       PP, MONI_SCATCS           , NUM);
+
+  G4double SH3_POT[NUM] =         {250.0,250.0};      // neV
+  G4double SH3_SPINFLIP[NUM] =      {0.0,0.0};   // rel. per wall collision
+  G4double SH3_ETA[NUM] =          {2e-4,2e-4};        // loss coefficient W/V
+  G4double SH3_DIFFUS[NUM] =       {0.1,0.1};    // diffuse scattering probability
+  G4double SH3_REFLECTIVITY[NUM] =     {1.0,1.0};   // reflectivity, not used parameter
+  G4double SH3_ABSCS[NUM] =       {0.00001,0.00001};    // 1/v loss cross section at room temperature for Be
+  G4double SH3_LOSSCS[NUM] =       {0., 0.};    // loss cross section at room temperature for Be
+  G4double SH3_SCATCS[NUM] =       {0.08, 0.08};    // (incoherent) "elastic" scattering cs
+  G4MaterialPropertiesTable *T4 = new G4MaterialPropertiesTable();
+  T4->AddProperty("REFLECTIVITY", PP, MONI_REFLECTIVITY,      NUM);
+  T4->AddProperty("DIFFUSION",    PP, MONI_DIFFUS,         NUM);
+  T4->AddProperty("FERMIPOT",     PP, MONI_POT,               NUM);
+  T4->AddProperty("SPINFLIP",     PP, MONI_SPINFLIP,       NUM);
+  T4->AddProperty("LOSS",         PP, MONI_ETA           , NUM);
+  T4->AddProperty("LOSSCS",       PP, MONI_LOSSCS           , NUM);
+  T4->AddProperty("ABSCS",        PP, MONI_ABSCS            , NUM);
+  T4->AddProperty("SCATCS",       PP, MONI_SCATCS           , NUM);
+ 
+  // --- Teflon
+
+  G4double CF_POT[NUM] =                 {124.0,         124.0};         // fermi_potentials.xls
+  G4double CF_SPINFLIP[NUM] =            {0.0,           0.0};
+  G4double CF_ETA[NUM] =                 {5.1e-4,        5.1e-4};        // Ignatovitch
+  G4double CF_DIFFUS[NUM] =              {0.05,          0.05};
+  G4double CF_REFLECTIVITY[NUM] =        {1.0,           1.0};           // not used
+  G4double CF_ABSCS[NUM] =               {0.0075,        0.0075};        // fermi_potentials.xls, average for C & F
+  G4double CF_LOSSCS[NUM] =              {0.0,           0.0};           // 
+  G4double CF_SCATCS[NUM] =              {13.57,         13.57};         // NIMA Volume 357, Number 2, 21 April 1995 , pp. 519-523(5)
+  G4MaterialPropertiesTable *Tteflon = new G4MaterialPropertiesTable();
+  Tteflon->AddProperty("REFLECTIVITY", PP, CF_REFLECTIVITY,      NUM);
+  Tteflon->AddProperty("DIFFUSION",    PP, CF_DIFFUS,            NUM);
+  Tteflon->AddProperty("FERMIPOT",     PP, CF_POT,               NUM);
+  Tteflon->AddProperty("SPINFLIP",     PP, CF_SPINFLIP,          NUM);
+  Tteflon->AddProperty("LOSS",         PP, CF_ETA              , NUM);
+  Tteflon->AddProperty("LOSSCS",       PP, CF_LOSSCS           , NUM);
+  Tteflon->AddProperty("ABSCS",        PP, CF_ABSCS            , NUM);
+  Tteflon->AddProperty("SCATCS",       PP, CF_SCATCS           , NUM);
+ 
+  // --- Diamond 
+
+  G4double D_POT[NUM] =         	{305.0,		305.0};		// The nEDM Progress Report (March 2003), page 5
+  G4double D_SPINFLIP[NUM] =		{0.0,		0.0};
+  G4double D_ETA[NUM] =          	{3.0e-4,	3.0e-4}; 		// ??
+  G4double D_DIFFUS[NUM] =       	{0.10,		0.10};    
+  G4double D_REFLECTIVITY[NUM] =     	{1.0,		1.0};		// not used
+  G4double D_ABSCS[NUM] =       	{0.0035,	0.0035};    	// (value for C)
+  G4double D_LOSSCS[NUM] =       	{0.0, 		0.0};    	// ??
+  G4double D_SCATCS[NUM] =       	{5.551, 	5.551};    	// (value for C)
+  G4MaterialPropertiesTable *Tsp3 = new G4MaterialPropertiesTable();
+  Tsp3->AddProperty("REFLECTIVITY", PP, D_REFLECTIVITY,      NUM);
+  Tsp3->AddProperty("DIFFUSION",    PP, D_DIFFUS,            NUM);
+  Tsp3->AddProperty("FERMIPOT",     PP, D_POT,               NUM);
+  Tsp3->AddProperty("SPINFLIP",     PP, D_SPINFLIP,          NUM);
+  Tsp3->AddProperty("LOSS",         PP, D_ETA              , NUM);
+  Tsp3->AddProperty("LOSSCS",       PP, D_LOSSCS           , NUM);
+  Tsp3->AddProperty("ABSCS",        PP, D_ABSCS            , NUM);
+  Tsp3->AddProperty("SCATCS",       PP, D_SCATCS           , NUM);
+
+  // --- Silicon Nitride
+  
+  G4double SiN_POT[NUM] =         	{179.0,		179.0};		// fermi_potentials.xls
+  G4double SiN_SPINFLIP[NUM] =		{0.0,		0.0};
+  G4double SiN_ETA[NUM] =          	{3.0e-4,	3.0e-4}; 	// ??
+  G4double SiN_DIFFUS[NUM] =       	{0.10,		0.10};    
+  G4double SiN_REFLECTIVITY[NUM] =     	{1.0,		1.0};		// not used
+  G4double SiN_ABSCS[NUM] =       	{0.0035,	0.0035};    
+  G4double SiN_LOSSCS[NUM] =       	{0.0, 		0.0};    	// ??
+  G4double SiN_SCATCS[NUM] =       	{5.551, 	5.551};    
+  G4MaterialPropertiesTable *Tsin = new G4MaterialPropertiesTable();
+  Tsin->AddProperty("REFLECTIVITY", PP, SiN_REFLECTIVITY,      NUM);
+  Tsin->AddProperty("DIFFUSION",    PP, SiN_DIFFUS,            NUM);
+  Tsin->AddProperty("FERMIPOT",     PP, SiN_POT,               NUM);
+  Tsin->AddProperty("SPINFLIP",     PP, SiN_SPINFLIP,          NUM);
+  Tsin->AddProperty("LOSS",         PP, SiN_ETA              , NUM);
+  Tsin->AddProperty("LOSSCS",       PP, SiN_LOSSCS           , NUM);
+  Tsin->AddProperty("ABSCS",        PP, SiN_ABSCS            , NUM);
+  Tsin->AddProperty("SCATCS",       PP, SiN_SCATCS           , NUM);
+ 
+  // --- Iron (magnetized, as seen by preferred spin orientation)
+  G4double Fe_POT[NUM] =         	{88.0,		88.0};		// 208 - 120 (for ~2T field) 
+  G4double Fe_SPINFLIP[NUM] =		{0.0,		0.0};
+  G4double Fe_ETA[NUM] =          	{4.0e-4,	4.e-4}; 	// ??
+  G4double Fe_DIFFUS[NUM] =       	{0.10,		0.10};    
+  G4double Fe_REFLECTIVITY[NUM] =     	{1.0,		1.0};		// not used
+  G4double Fe_ABSCS[NUM] =       	{2.56,		2.56};    	// fermi_potentials.xls
+  G4double Fe_LOSSCS[NUM] =       	{0.0, 		0.0};    	// ??
+  G4double Fe_SCATCS[NUM] =       	{11.62, 	11.62};    	// fermi_potentials.xls
+  G4MaterialPropertiesTable *Tfe = new G4MaterialPropertiesTable();
+  Tfe->AddProperty("REFLECTIVITY", PP, Fe_REFLECTIVITY,      NUM);
+  Tfe->AddProperty("DIFFUSION",    PP, Fe_DIFFUS,            NUM);
+  Tfe->AddProperty("FERMIPOT",     PP, Fe_POT,               NUM);
+  Tfe->AddProperty("SPINFLIP",     PP, Fe_SPINFLIP,          NUM);
+  Tfe->AddProperty("LOSS",         PP, Fe_ETA              , NUM);
+  Tfe->AddProperty("LOSSCS",       PP, Fe_LOSSCS           , NUM);
+  Tfe->AddProperty("ABSCS",        PP, Fe_ABSCS            , NUM);
+  Tfe->AddProperty("SCATCS",       PP, Fe_SCATCS           , NUM);
+
+  // --- MATERIAL ASSIGNMENT
+  
+  WorldMaterial    	= Vacuum ;
+	
+  FoilMaterial = Aluminium1;
+  FoilMaterial->SetMaterialPropertiesTable(Talu);
+
+  GuideMaterial = Nickel ;  
+  GuideMaterial->SetMaterialPropertiesTable(Tnickel);  
