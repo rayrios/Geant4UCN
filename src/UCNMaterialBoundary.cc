@@ -16,6 +16,49 @@
 
 #define neV (1.0e-9*eV)
 
+/**
+ * Add a state (0 - closed, 1 - open) at a given time
+ * keeps the array sorted so you don't have to
+ */
+void UCNShutterStates::AddState(int state, float time) {
+  if (n >= UCN_SHUTTERS_STATES_MAX) {
+    G4cerr << "Shutter states maximum reached" << G4endl;
+  }
+  // keep array in order
+  int i, j;
+  for (i=0; i<n; i++) {
+    if (time < times[i]) {
+      break;
+    }
+  }
+  // shift tail of array
+  for (j=n-1; j>=i; j--) {
+    states[j+1] = states[j];
+    times[j+1] = times[j];
+  }
+  // insert
+  states[i] =  state;
+  times[i] = time;
+  n++;
+}
+
+/**
+ * Get shutter state (0 - closed, 1 - open) at a given time
+ * default value if not in definite state
+ */
+int UCNShutterStates::GetState(float time) {
+  int state = UCN_SHUTTERS_DEFAULT_STATE;
+  for (int i=0; i<n; i++) {
+    if (time >= times[i]) {
+      state = states[i];
+    }
+    else {
+      break;
+    }
+  }
+  return state;
+}
+
 UCNMaterialBoundary* UCNMaterialBoundary::theInstance = 0;
 
 UCNMaterialBoundary::UCNMaterialBoundary(const G4String& processName)
@@ -32,7 +75,6 @@ UCNMaterialBoundary::UCNMaterialBoundary(const G4String& processName)
  sh_abscs = 0;sh_losscs = 0;sh_scatcs = 0;
  return_it = 0;
  useshutters = 0;
- st=0;
 }
 
 UCNMaterialBoundary::~UCNMaterialBoundary(){
@@ -77,12 +119,9 @@ const G4Step& aStep)
     sscanf(volnam1, "Shutter%d", &nr2);
     G4double t2 =  aTrack.GetGlobalTime();
     if (nr){
-      for (int l = 0; l < st; l++){
-	if (states[l][0] == nr){ 
-	  // if the shutternr is correct, check details   
-	  // G4cout << "x shutter nr " << nr << ", time " << t2*1e-9 << G4endl;
-	  if (states[l][2] <= t2 && states[l+1][2] > t2){
-            state = (int)states[l][1];   // time (proper time)!
+      // retrieve state for shutter nr at time t2
+      int state = shutter_states[nr].GetState(t2);
+
 	    if (verboseLevel> 3) {
 	      G4cout << "ucnshutter: set the state for shutter " << nr << " to " << state << G4endl;
 	    }
@@ -130,9 +169,7 @@ const G4Step& aStep)
 	      }
 	      return_it = 0;
 	    }
-	  }	
-	}
-      }
+
     }  
     else if (nr2){
       if (verboseLevel> 3) {
@@ -488,28 +525,31 @@ void UCNMaterialBoundary::setVerbose(G4int level)
 }
 
 void UCNMaterialBoundary::SetShutterClose(G4String newval){
-	G4cout << "ucnshutter: setshutterclose " << newval << ", st " << st << G4endl;
-	int nr = 0;
-	float ti = 0.;
-        sscanf(newval, "%d %f", &nr, &ti); // shutternr time
-        //G4cout <<" also " << nr << "; " << ti << G4endl;
-	states[st][0] = nr;  //  0 shutternumber, 1 state, 2 time
-	states[st][1] = 0.;  //  0 shutternumber, 1 state, 2 time
-	states[st][2] = ti*second;  //  0 shutternumber, 1 state, 2 time
-	st++;
-	
+  int nr = 0;
+  float ti = 0.;
+  sscanf(newval, "%d %f", &nr, &ti); // shutternr time
+  if (nr >= UCN_SHUTTERS_MAX || nr < 0) {
+    G4cerr << "invalid shutter number " << nr << G4endl;
+    return;
+  }
+  G4cout << "ucnshutter: setshutterclose (shutter " << nr
+	 << ", t=" << ti << G4endl;
+  shutter_states[nr].AddState(0, ti*second);
 }
+
 void UCNMaterialBoundary::SetShutterOpen(G4String newval){
-	G4cout << "ucnshutter: setshutteropen " << newval << ", st " << st << G4endl;
-	int nr = 0;
-	float ti = 0.;
-        sscanf(newval, "%d %f", &nr, &ti); // shutternr time
-        //G4cout <<" also " << nr << "; " << ti << G4endl;
-	states[st][0] = nr;  //  0 shutternumber, 1 state, 2 time
-	states[st][1] = 1.;  //  0 shutternumber, 1 state, 2 time
-	states[st][2] = ti*second;  //  0 shutternumber, 1 state, 2 time
-	st++;
+  int nr = 0;
+  float ti = 0.;
+  sscanf(newval, "%d %f", &nr, &ti); // shutternr time
+  if (nr >= UCN_SHUTTERS_MAX || nr < 0) {
+    G4cerr << "invalid shutter number " << nr << G4endl;
+    return;
+  }
+  G4cout << "ucnshutter: setshutteropen (shutter " << nr
+	 << ", t=" << ti << G4endl;
+  shutter_states[nr].AddState(1, ti*second);
 }
+
 void UCNMaterialBoundary::SetUseShutters(G4String newval){
 if (newval == "1"){
  useshutters = 1;
