@@ -21,8 +21,23 @@
 #include "G4Material.hh"
 #include "UCNUCN.hh"
 
+#define UCN_SHUTTERS_MAX 10
+#define UCN_SHUTTERS_STATES_MAX 20
+#define UCN_SHUTTERS_DEFAULT_STATE 0
+
 class UCNMaterialBoundaryMessenger;
 class UCNShutterMessenger;
+
+class UCNShutterStates
+{
+ public:
+  int n;
+  float times[UCN_SHUTTERS_STATES_MAX];
+  int states[UCN_SHUTTERS_STATES_MAX];
+  UCNShutterStates() : n(0) {};
+  void AddState(int state, float time);
+  int GetState(float time);
+};
 
 class UCNMaterialBoundary : public G4VContinuousDiscreteProcess
 {
@@ -74,9 +89,7 @@ public:
 
 
 private:
-	int st;  // shutter
-	int state; //shutterstate
-	float states[20][3];  //  0 shutternumber, 1 state, 2 time
+	UCNShutterStates shutter_states[UCN_SHUTTERS_MAX];
 	UCNMaterialBoundaryMessenger * theMessenger;
 	UCNShutterMessenger * theShutterMessenger;
 	G4int just_reflected;
