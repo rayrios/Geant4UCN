@@ -137,7 +137,6 @@ G4VPhysicalVolume* UCNDetectorConstruction::ConstructCalorimeter()
   G4LogicalVolume *logicFoil = new  G4LogicalVolume(solidFoil, FoilMaterial, "FoilLV");
   G4VPhysicalVolume *physiFoil = new G4PVPlacement(0, G4ThreeVector(), "FoilPV", logicFoil, physiWorld, false, 0);
   
-  
     
   //--------- Visualization attributes -------------------------------
 
@@ -199,6 +198,85 @@ G4VPhysicalVolume* UCNDetectorConstruction::ConstructCalorimeter()
   logicGuide->SetVisAttributes(grayAndSolid);
   logicFoil->SetVisAttributes(redAndSolid);
 
+//-------------------------------Shutters--------------------------------------------------------------------
+
+
+// shutter 1 
+// 
+      G4double s5radius = 27.999; // mm
+      if (s5radius > 0){
+      G4double t1innerradius =0*cm;// mm
+      G4double t1thickness = 20.; //mm
+      G4Tubs *solidt2 = new G4Tubs("s1",t1innerradius,rMin-.00001*cm,t1thickness/2.,0.,twopi);
+      G4LogicalVolume *logict2 = new G4LogicalVolume(solidt2, GuideMaterial,"s1");
+      G4double phi, x, y, z;
+      phi = 0.;        x = 0.0*mm;       y = 0.0*mm;   z = -95.*cm;
+      G4RotationMatrix rot; rot.rotateX(phi);
+      G4VPhysicalVolume* physis2;
+                        physis2 = new G4PVPlacement(
+                        G4Transform3D(rot,G4ThreeVector(x,y,z)),
+                        "Shutter1", logict2, physiWorld, false, 0);
+      logict2->SetVisAttributes(redAndSolid);
+      }
+
+      G4double s6radius = 70.;  
+      if (s6radius > 0){
+
+
+      G4double t1innerradius = rMin; // mm
+      G4double t1sthickness = 20.; //mm
+      G4Tubs *solidt2s = new G4Tubs("s1surround",0,rMin-.00001*cm,t1sthickness/2.,0.,twopi);
+      G4LogicalVolume *logict2s = new G4LogicalVolume(solidt2s, GuideMaterial,"s1surround");
+      G4double phi, x, y, z;
+      phi = 0.;        x = 0.0*mm;       y = 0.0*mm;   z = -95.*cm;
+      G4RotationMatrix rot; rot.rotateX(phi);
+      G4VPhysicalVolume* physit4;
+                        physit4 = new G4PVPlacement(
+                        G4Transform3D(rot,G4ThreeVector(x,y,z)),
+                        "Sh_surrounding1", logict2s, physiWorld, false, 0);
+      logict2s->SetVisAttributes(redAndSolid);
+	
+    }
+  
+// shutter 2 
+// 
+      G4double s3radius = 27.999; // mm
+      if (s3radius > 0){
+      G4double t1innerradius =0*cm;// mm
+      G4double t1thickness = 20.; //mm
+      G4Tubs *solidt2 = new G4Tubs("s2",t1innerradius,rMin-.00001*cm,t1thickness/2.,0.,twopi);
+      G4LogicalVolume *logict2 = new G4LogicalVolume(solidt2, GuideMaterial,"s2");
+      G4double phi, x, y, z;
+      phi = 0.;        x = 0.0*mm;       y = 0.0*mm;   z = 95.*cm;
+      G4RotationMatrix rot; rot.rotateX(phi);
+      G4VPhysicalVolume* physis2;
+                        physis2 = new G4PVPlacement(
+                        G4Transform3D(rot,G4ThreeVector(x,y,z)),
+                        "Shutter2", logict2, physiWorld, false, 0);
+      logict2->SetVisAttributes(redAndSolid);
+      }
+
+      G4double t1sthickness1;
+      G4double s4radius = 70.;  
+    if (s4radius > 0){
+
+
+      G4double t1innerradius = rMin; // mm
+      G4double t1sthickness = 20.; //mm
+      t1sthickness1=t1sthickness;
+      G4Tubs *solidt2s = new G4Tubs("s2surround",0,rMin-.00001*cm,t1sthickness1/2.,0.,twopi);
+      G4LogicalVolume *logict2s = new G4LogicalVolume(solidt2s, GuideMaterial,"s2surround");
+      G4double phi, x, y, z;
+      phi = 0.;        x = 0.0*mm;       y = 0.0*mm;   z = 95.*cm;
+      G4RotationMatrix rot; rot.rotateX(phi);
+      G4VPhysicalVolume* physit4;
+                        physit4 = new G4PVPlacement(
+                        G4Transform3D(rot,G4ThreeVector(x,y,z)),
+                        "Sh_surrounding2", logict2s, physiWorld, false, 0);
+      logict2s->SetVisAttributes(redAndSolid);
+	
+    }
+//-------------------------------------------------------------------------------------------------------------------------
   return physiWorld;
 }
 
