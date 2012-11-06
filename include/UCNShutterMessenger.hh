@@ -44,6 +44,7 @@ class UCNShutterMessenger: public G4UImessenger
    G4UIcmdWithAString*        sh7Cmd;
    G4UIcmdWithAString*        sh8Cmd;
    G4UIcmdWithAString*        sh9Cmd;
+   G4UIcmdWithAString*        loopCmd;
  
    G4UIdirectory*     shutterDir;
 };
