@@ -24,6 +24,7 @@
 #define UCN_SHUTTERS_MAX 10
 #define UCN_SHUTTERS_STATES_MAX 20
 #define UCN_SHUTTERS_DEFAULT_STATE 0
+#define UCN_SHUTTERS_DEFAULT_LOOP 0
 
 class UCNMaterialBoundaryMessenger;
 class UCNShutterMessenger;
@@ -32,11 +33,13 @@ class UCNShutterStates
 {
  public:
   int n;
+  int loop;
   float times[UCN_SHUTTERS_STATES_MAX];
   int states[UCN_SHUTTERS_STATES_MAX];
-  UCNShutterStates() : n(0) {};
+  UCNShutterStates() : n(0), loop(UCN_SHUTTERS_DEFAULT_LOOP) {};
   void AddState(int state, float time);
   int GetState(float time);
+  void SetLoop(int loop);
 };
 
 class UCNMaterialBoundary : public G4VContinuousDiscreteProcess
@@ -84,6 +87,7 @@ public:
 	void setVerbose(G4int level);
 	void SetShutterClose(G4String newval);
 	void SetShutterOpen(G4String newval);
+	void SetShutterLoop(G4String newval);
         void SetUseShutters(G4String newval);
 	void SetShutterVerbose(G4String newval);
 

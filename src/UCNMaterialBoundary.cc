@@ -48,6 +48,16 @@ void UCNShutterStates::AddState(int state, float time) {
  */
 int UCNShutterStates::GetState(float time) {
   int state = UCN_SHUTTERS_DEFAULT_STATE;
+  if (loop && n > 0) {
+    // in case of loop, offset time (mod)
+    float last_t = times[n-1];
+    if (time > last_t) {
+      int m = floor(time/last_t);
+      time -= m * last_t;
+      // set to last state in loop
+      state = states[n-1];
+    }
+  }
   for (int i=0; i<n; i++) {
     if (time >= times[i]) {
       state = states[i];
@@ -57,6 +67,10 @@ int UCNShutterStates::GetState(float time) {
     }
   }
   return state;
+}
+
+void UCNShutterStates::SetLoop(int loop) {
+  this->loop = loop;
 }
 
 UCNMaterialBoundary* UCNMaterialBoundary::theInstance = 0;
@@ -548,6 +562,19 @@ void UCNMaterialBoundary::SetShutterOpen(G4String newval){
   G4cout << "ucnshutter: setshutteropen (shutter " << nr
 	 << ", t=" << ti << G4endl;
   shutter_states[nr].AddState(1, ti*second);
+}
+
+void UCNMaterialBoundary::SetShutterLoop(G4String newval){
+  int nr = 0;
+  int loop = 0;
+  sscanf(newval, "%d %d", &nr, &loop);
+  if (nr >= UCN_SHUTTERS_MAX || nr < 0) {
+    G4cerr << "invalid shutter number " << nr << G4endl;
+    return;
+  }
+  G4cout << "ucnshutter: setshutter loop " << loop
+	 << " (shutter " << nr << ")" << G4endl;
+  shutter_states[nr].SetLoop(loop);
 }
 
 void UCNMaterialBoundary::SetUseShutters(G4String newval){

@@ -47,6 +47,13 @@ G4cout << "create messenger for the UCN shutters " << G4endl;
   sh7Cmd->SetDefaultValue("");
   sh7Cmd->AvailableForStates(G4State_Idle);
 
+  loopCmd = new G4UIcmdWithAString("/shutter/loop",this);
+  loopCmd->SetGuidance("Choose, if shutters should be used");
+  loopCmd->SetGuidance("e.g. /shutter/loop nr (0|1)");
+  loopCmd->SetParameterName("choice",true);
+  loopCmd->SetDefaultValue("");
+  loopCmd->AvailableForStates(G4State_Idle);
+
   sh8Cmd = new G4UIcmdWithAString("/shutter/setverbose",this);
   sh8Cmd->SetGuidance("set shutter verbose level");
   sh8Cmd->SetGuidance("e.g. /shutter/verbose 3");
@@ -83,6 +90,10 @@ void UCNShutterMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
  }
  if( command == sh8Cmd )    {    // set shutterclose
    tPropagator->SetShutterVerbose(newValue);
+ }
+ if (command == loopCmd) {
+   // newValue "%d %d" as shutter number and bool
+   tPropagator->SetShutterLoop(newValue);
  }
 
 }
