@@ -7,6 +7,7 @@ name := SCMagnet
 G4TARGET := $(name)
 G4EXLIB := true
 
+CPPFLAGS += -I/usr/include/qt4/Qt -I/usr/include/qt4
 
 ifndef G4INSTALL
   G4INSTALL = ../../../..

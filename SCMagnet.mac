@@ -59,13 +59,7 @@
 #
 
 # visualization
-/vis/scene/create
-#/vis/open DAWNFILE
-/vis/open OGLSX
-#/vis/viewer/flush
-/vis/viewer/set/viewpointThetaPhi 90 180 deg
-/vis/viewer/zoom 1
-/vis/viewer/flush
+/control/execute vis.mac
 
 # add the trajectories
 /tracking/storeTrajectory 1

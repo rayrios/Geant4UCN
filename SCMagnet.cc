@@ -40,10 +40,8 @@
 #include "Randomize.hh"
 #include "G4UItcsh.hh"
 
-//#ifdef G4VIS_USE
-#include "UCNVisManager.hh"
-//#endif
 #include "G4VisExecutive.hh"
+#include "G4UIExecutive.hh"
 
 #include "UCNDetectorConstruction.hh"
 #include "UCNFieldSetup.hh"
@@ -88,15 +86,6 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new UCNPhysicsList(detector));
   
-#ifdef G4VIS_USE
-
-  // visualization manager
-
-  G4VisManager* visManager = new UCNVisManager;
-  visManager->Initialize();
-
-#endif 
- 
   // Set user action classes
 
   runManager->SetUserAction(new UCNPrimaryGeneratorAction(detector));
@@ -112,42 +101,33 @@ int main(int argc,char** argv)
   F02SteppingAction* steppingAction = new F02SteppingAction();
   runManager->SetUserAction(steppingAction);
   
-   G4UIsession* session=0;
-  
-  if (argc==1)   // Define UI session for interactive mode.
-    {
-      // G4UIterminal is a (dumb) terminal.
-#if defined(G4UI_USE_XM)
-      session = new G4UIXm(argc,argv);
-#elif defined(G4UI_USE_WIN32)
-      session = new G4UIWin32();
-#elif defined(G4UI_USE_TCSH)
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif
-    }
-  
   // Initialize G4 kernel, physics tables ...
 
   runManager->Initialize();
     
+
+#ifdef G4VIS_USE
+
+  // visualization manager
+
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
+
+#endif
   // get the pointer to the User Interface manager 
 
     
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 
-  if (session)   // Define UI session for interactive mode.
+  if (argc == 1)   // Define UI session for interactive mode.
     {
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+
       // G4UIterminal is a (dumb) terminal.
       UI->ApplyCommand("/control/execute SCMagnet.mac");    
-#if defined(G4UI_USE_XM) || defined(G4UI_USE_WIN32)
-      // Customize the G4UIXm,Win32 menubar with a macro file :
-      //UI->ApplyCommand("/control/execute visTutor/gui.mac");
-#endif
-      session->SessionStart();
-      delete session;
+      ui->SessionStart();
+      delete ui;
     }
   else           // Batch mode
     { 
